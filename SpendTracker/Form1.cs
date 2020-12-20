@@ -31,9 +31,8 @@ namespace SpendTracker
             StartPosition = FormStartPosition.Manual;
             Location = (Point)new Size(x, y);
 
-            // 禁止視窗最大或最小化
+            // 禁止視窗最大化
             MaximizeBox = false;
-            MinimizeBox = false;
 
             // 禁止使用者手動延伸視窗邊界
             FormBorderStyle = FormBorderStyle.FixedDialog;
