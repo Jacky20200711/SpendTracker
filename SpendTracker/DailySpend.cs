@@ -9,7 +9,6 @@ namespace SpendTracker
         public string Date { get; set; }
         public int Food { get; set; }
         public int Transportation { get; set; }
-        public int necessities { get; set; }
         public int Other { get; set; }
         public int TotalAmount { get; set; }
         public string Remarks { get; set; }
