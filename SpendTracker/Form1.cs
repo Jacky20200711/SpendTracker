@@ -20,7 +20,7 @@ namespace SpendTracker
 
             // 計算主視窗對應該解析度的寬與高
             int RelativeWidth = (int)(Convert.ToInt32(DesktopWidthStr) * 0.8);
-            int RelativeHeight = (int)(Convert.ToInt32(DesktopHeightStr) * 0.9);
+            int RelativeHeight = 700;
 
             // 調整主視窗的大小
             Size = new Size(RelativeWidth, RelativeHeight);
