@@ -13,6 +13,5 @@ namespace SpendTracker
         public int Other { get; set; }
         public int TotalAmount { get; set; }
         public string Remarks { get; set; }
-        public Label EditField { get; set; }
     }
 }
