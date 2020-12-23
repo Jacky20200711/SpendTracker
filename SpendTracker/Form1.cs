@@ -15,6 +15,7 @@ namespace SpendTracker
         TableLayoutPanel table = new TableLayoutPanel();
         List<Button> titleBar = new List<Button>();
         List<DailySpend> dailySpends = new List<DailySpend>();
+        DailySpend totalSpend = new DailySpend();
 
         public void ArrangeForm1()
         {
@@ -175,8 +176,13 @@ namespace SpendTracker
                 // 讀取檔案並寫入類別
                 // Todo ...
 
-                // 將測試用的假資料寫入類別
-                for (int i = 0; i <= 17; i++)
+                // 將測試用的假資料寫入類別 & 計算各項花費的加總
+                int Food = 0;
+                int Transportation = 0;
+                int Other = 0;
+                int TotalAmount = 0;
+
+                for (int i = 0; i < 31; i++)
                 {
                     dailySpends.Add(new DailySpend 
                     {
@@ -188,7 +194,19 @@ namespace SpendTracker
                         Remarks = "測試測試測試測試測試測試測試測試測試",
                         EditField = new Label()
                     });
+
+                    Food += dailySpends.Last().Food;
+                    Transportation += dailySpends.Last().Transportation;
+                    Other += dailySpends.Last().Other;
+                    TotalAmount += dailySpends.Last().TotalAmount;
                 }
+
+                // 紀錄各項花費的加總結果
+                totalSpend.Date = dailySpends[0].Date.Substring(0, 7);
+                totalSpend.Food = Food;
+                totalSpend.Transportation = Transportation;
+                totalSpend.Other = Other;
+                totalSpend.TotalAmount = TotalAmount;
             }
             catch (Exception ex)
             {
@@ -200,7 +218,8 @@ namespace SpendTracker
         {
             try
             {
-                for (int index = 0; index < dailySpends.Count; index++)
+                // 每一頁呈現17筆資料(第17筆為花費加總)
+                for (int index = 0; index < 17; index++)
                 {
                     // 動態新增一行
                     table.RowCount++;
@@ -248,6 +267,18 @@ namespace SpendTracker
 
                     // 將編輯用的cell連動到類別對應的資料，以方便之後抓取按鈕事件
                     dailySpends[index].EditField = labels[6];
+
+                    // 最後一列用來呈現這個月的加總結果
+                    if(index == 16)
+                    {
+                        labels[0].Text = totalSpend.Date;
+                        labels[1].Text = totalSpend.Food.ToString();
+                        labels[2].Text = totalSpend.Transportation.ToString();
+                        labels[3].Text = totalSpend.Other.ToString();
+                        labels[4].Text = totalSpend.TotalAmount.ToString();
+                        labels[5].Text = "這個月的各項加總";
+                        labels[6].Text = "結算";
+                    }
                 }
             }
             catch (Exception ex)
