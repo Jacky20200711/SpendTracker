@@ -46,14 +46,40 @@ namespace SpendTracker
         public void ArrangeComboBox1()
         {
             // 設置大小
-            comboBox1.Size = new Size(93, comboBox1.Height);
+            comboBox1.Size = new Size(70, comboBox1.Height);
 
             // 設置相對位置
             int x = (int)(Size.Width * 0.495) - (comboBox1.Width) / 2;
-            comboBox1.Location = (Point)new Size(x, 23);
+            comboBox1.Location = (Point)new Size(x - 90, 23);
 
             // 預設內容
-            comboBox1.Text = DateTime.Now.ToString("yyyy年MM月");
+            comboBox1.Text = DateTime.Now.ToString("yyyy年");
+        }
+
+        public void ArrangeComboBox2()
+        {
+            // 設置大小
+            comboBox2.Size = new Size(56, comboBox1.Height);
+
+            // 設置相對位置
+            int x = (int)(Size.Width * 0.495) - (comboBox1.Width) / 2;
+            comboBox2.Location = (Point)new Size(x, 23);
+
+            // 預設內容
+            comboBox2.Text = DateTime.Now.ToString("MM月");
+        }
+
+        public void ArrangeSubmitButton()
+        {
+            // 設置大小
+            SubmitButton.Size = new Size(86, comboBox1.Height);
+
+            // 設置相對位置
+            int x = (int)(Size.Width * 0.495) - (comboBox1.Width) / 2;
+            SubmitButton.Location = (Point)new Size(x + 74, 23);
+
+            // 預設內容
+            SubmitButton.Text = "送出查詢";
         }
 
         public void ArrangePanel1()
@@ -99,6 +125,8 @@ namespace SpendTracker
             InitializeComponent();
             ArrangeForm1();
             ArrangeComboBox1();
+            ArrangeComboBox2();
+            ArrangeSubmitButton();
             ArrangePanel1();
             ArrangeTable();
             ArrangePageButton();
@@ -224,7 +252,9 @@ namespace SpendTracker
 
         public int GetDayOfCurrentMonth()
         {
-            // 取得下拉選單的當前內容
+            // 取得下拉選單的年與月
+            // Todo
+
             // Todo
 
             // 透過月份取得天數
