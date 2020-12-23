@@ -17,6 +17,7 @@ namespace SpendTracker
         List<DailySpend> dailySpends = new List<DailySpend>();
         DailySpend totalSpend = new DailySpend();
         List<List<Label>> rowList = new List<List<Label>>();
+        int currentPage = 1;
 
         public void ArrangeForm1()
         {
@@ -194,7 +195,44 @@ namespace SpendTracker
                 rowList.Last()[4].Width = (int)(table.Width * 0.1228);
                 rowList.Last()[5].Width = (int)(table.Width * 0.3056);
                 rowList.Last()[6].Width = (int)(table.Width * 0.0856);
+
             }
+
+            // 若用迴圈綁定會有BUG，所以手動綁定 label & click 事件
+            rowList[0][6].Click += delegate { GoEditPage(currentPage == 1 ? 0 : 16); };
+            rowList[1][6].Click += delegate { GoEditPage(currentPage == 1 ? 1 : 17); };
+            rowList[2][6].Click += delegate { GoEditPage(currentPage == 1 ? 2 : 18); };
+            rowList[3][6].Click += delegate { GoEditPage(currentPage == 1 ? 3 : 19); };
+            rowList[4][6].Click += delegate { GoEditPage(currentPage == 1 ? 4 : 20); };
+            rowList[5][6].Click += delegate { GoEditPage(currentPage == 1 ? 5 : 21); };
+            rowList[6][6].Click += delegate { GoEditPage(currentPage == 1 ? 6 : 22); };
+            rowList[7][6].Click += delegate { GoEditPage(currentPage == 1 ? 7 : 23); };
+            rowList[8][6].Click += delegate { GoEditPage(currentPage == 1 ? 8 : 24); };
+            rowList[9][6].Click += delegate { GoEditPage(currentPage == 1 ? 9 : 25); };
+            rowList[10][6].Click += delegate { GoEditPage(currentPage == 1 ? 10 : 26); };
+            rowList[11][6].Click += delegate { GoEditPage(currentPage == 1 ? 11 : 27); };
+            rowList[12][6].Click += delegate { GoEditPage(currentPage == 1 ? 12 : 28); };
+            rowList[13][6].Click += delegate { GoEditPage(currentPage == 1 ? 13 : 29); };
+            rowList[14][6].Click += delegate { GoEditPage(currentPage == 1 ? 14 : 30); };
+            rowList[15][6].Click += delegate { GoEditPage(currentPage == 1 ? 15 : 31); };
+        }
+
+        public void GoEditPage(int index)
+        {
+            MessageBox.Show(index.ToString(), "Test");
+        }
+
+        public int GetDayOfCurrentMonth()
+        {
+            // 取得下拉選單的當前內容
+            // Todo
+
+            // 透過月份取得天數
+            // Todo
+
+            // 若是二月且年分為閏年，則修改天數
+            // Todo
+            return 28;
         }
 
         private void ReadDataToList(int year, int month)
@@ -221,8 +259,9 @@ namespace SpendTracker
                 int Transportation = 0;
                 int Other = 0;
                 int TotalAmount = 0;
+                int numOfDay = GetDayOfCurrentMonth();
 
-                for (int i = 0; i < 32; i++)
+                for (int i = 0; i < numOfDay; i++)
                 {
                     dailySpends.Add(new DailySpend 
                     {
@@ -258,10 +297,15 @@ namespace SpendTracker
         {
             try
             {
+                // 第一頁會呈現16筆資料 & 加總
+                // 第二頁會呈現(當月的天數 - 16)筆資料 & 加總
+                int end = CurrentPage == 1 ? 16 : dailySpends.Count - 16;
+
+                // 透過頁數來對應特定日期的資料
                 int index = CurrentPage == 1 ? 0 : 16;
 
-                // 寫入16筆資料到表格
-                for (int i = 0; i < 16; i++)
+                // 將各日期的資料寫入表格
+                for (int i = 0; i < end; i++)
                 {
                     rowList[i][0].Text = dailySpends[index].Date;
                     rowList[i][1].Text = dailySpends[index].Food.ToString();
@@ -273,14 +317,26 @@ namespace SpendTracker
                     index++;
                 }
 
-                // 寫入花費加總到表格的最後一列
+                // 清空多餘的日期資料
+                for (int i = end; i < rowList.Count - 1; i++)
+                {
+                    rowList[i][0].Text = "------";
+                    rowList[i][1].Text = "------";
+                    rowList[i][2].Text = "------";
+                    rowList[i][3].Text = "------";
+                    rowList[i][4].Text = "------";
+                    rowList[i][5].Text = "------";
+                    rowList[i][6].Text = "----";
+                }
+
+                // 將花費加總寫入該頁的最後一列
                 rowList[^1][0].Text = totalSpend.Date;
                 rowList[^1][1].Text = totalSpend.Food.ToString();
                 rowList[^1][2].Text = totalSpend.Transportation.ToString(); ;
                 rowList[^1][3].Text = totalSpend.Other.ToString(); ;
                 rowList[^1][4].Text = totalSpend.TotalAmount.ToString(); ;
                 rowList[^1][5].Text = totalSpend.Remarks;
-                rowList[^1][6].Text = "編輯";
+                rowList[^1][6].Text = "----";
             }
             catch (Exception ex)
             {
@@ -308,12 +364,14 @@ namespace SpendTracker
         {
             // 寫入前半個月的資料
             WriteDataToTable(1);
+            currentPage = 1;
         }
 
         private void GoNextButton_Click(object sender, EventArgs e)
         {
             // 寫入後半個月的資料
             WriteDataToTable(2);
+            currentPage = 2;
         }
 
         // 令所有控件啟用 DoubleBuffering，解決修改表格數據時介面會閃爍並卡住的問題
