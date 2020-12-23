@@ -18,16 +18,14 @@ namespace SpendTracker
 
         public void ArrangeForm1()
         {
-            // 取得螢幕解析度
+            // 取得螢幕的寬度
             string DesktopWidthStr = SystemInformation.PrimaryMonitorSize.Width.ToString();
-            string DesktopHeightStr = SystemInformation.PrimaryMonitorSize.Height.ToString();
 
-            // 計算主視窗對應該解析度的寬與高
+            // 設置適應螢幕的寬度
             int RelativeWidth = (int)(Convert.ToInt32(DesktopWidthStr) * 0.8);
-            int RelativeHeight = 700;
 
-            // 調整主視窗的大小
-            Size = new Size(RelativeWidth, RelativeHeight);
+            // 調整主視窗的寬與高(將高度固定比較不容易在別台電腦跑版)
+            Size = new Size(RelativeWidth, 700);
 
             // 令主視窗居中顯示
             int x = (SystemInformation.WorkingArea.Width - Size.Width) / 2;
@@ -44,13 +42,12 @@ namespace SpendTracker
 
         public void ArrangeComboBox1()
         {
-            // 設置相對寬度
-            comboBox1.Size = new Size((int)(Size.Width * 0.1), comboBox1.Height);
+            // 設置大小
+            comboBox1.Size = new Size(94, comboBox1.Height);
 
             // 設置相對位置
             int x = (int)(Size.Width * 0.495) - (comboBox1.Width) / 2;
-            int y = (int)(Size.Height * 0.03);
-            comboBox1.Location = (Point)new Size(x, y);
+            comboBox1.Location = (Point)new Size(x, 23);
 
             // 預設內容
             comboBox1.Text = DateTime.Now.ToString("yyyy年MM月");
