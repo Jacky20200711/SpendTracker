@@ -16,6 +16,7 @@ namespace SpendTracker
         List<Button> titleBar = new List<Button>();
         List<DailySpend> dailySpends = new List<DailySpend>();
         DailySpend totalSpend = new DailySpend();
+        List<List<Label>> rowList = new List<List<Label>>();
 
         public void ArrangeForm1()
         {
@@ -26,7 +27,7 @@ namespace SpendTracker
             int RelativeWidth = (int)(Convert.ToInt32(DesktopWidthStr) * 0.8);
 
             // 調整主視窗的寬與高(將高度固定比較不容易在別台電腦跑版)
-            Size = new Size(RelativeWidth, 700);
+            Size = new Size(RelativeWidth, 670);
 
             // 令主視窗居中顯示
             int x = (SystemInformation.WorkingArea.Width - Size.Width) / 2;
@@ -44,7 +45,7 @@ namespace SpendTracker
         public void ArrangeComboBox1()
         {
             // 設置大小
-            comboBox1.Size = new Size(94, comboBox1.Height);
+            comboBox1.Size = new Size(93, comboBox1.Height);
 
             // 設置相對位置
             int x = (int)(Size.Width * 0.495) - (comboBox1.Width) / 2;
@@ -83,13 +84,43 @@ namespace SpendTracker
             // 創建並調整標題列
             AddTitleBar();
 
-            // 載入現年現月的資料
-            int currentYear = DateTime.Now.Year;
-            int currentMonth = DateTime.Now.Month;
-            ReadDataToList(currentYear, currentMonth);
+            // 創建 17 列，每列有 7 個cell
+            for (int index = 0; index < 17; index++)
+            {
+                // 動態新增一行
+                table.RowCount++;
 
-            // 將現年現月的資料寫入表格
-            WriteDataToTable();
+                // 設定這一行的高度
+                table.RowStyles.Add(new RowStyle(SizeType.Absolute, 24));
+                int cellHeight = 24;
+
+                // 令每個欄位都顯示邊框
+                table.CellBorderStyle = TableLayoutPanelCellBorderStyle.OutsetPartial;
+
+                int j = table.RowCount - 1;
+
+                // 建立這一列的 cell 並添加到表格
+                rowList.Add(new List<Label>());
+                for (int i = 0; i < 7; i++)
+                {
+                    rowList.Last().Add(new Label
+                    {
+                        Height = cellHeight,
+                        Font = new Font("Microsoft JhengHei", 10, FontStyle.Regular),
+                        TextAlign = ContentAlignment.MiddleCenter
+                    });
+                    table.Controls.Add(rowList.Last().Last(), i, j);
+                }
+
+                // 令各cell的寬度等於各欄位的寬度
+                rowList.Last()[0].Width = (int)(table.Width * 0.1228);
+                rowList.Last()[1].Width = (int)(table.Width * 0.1228);
+                rowList.Last()[2].Width = (int)(table.Width * 0.1228);
+                rowList.Last()[3].Width = (int)(table.Width * 0.1228);
+                rowList.Last()[4].Width = (int)(table.Width * 0.1228);
+                rowList.Last()[5].Width = (int)(table.Width * 0.3056);
+                rowList.Last()[6].Width = (int)(table.Width * 0.0856);
+            }
 
             // 令表格和容器的高度相同
             table.Height = panel1.Height;
@@ -104,6 +135,9 @@ namespace SpendTracker
             ArrangeComboBox1();
             ArrangePanel1();
             ArrangeTable();
+            ArrangePageButton();
+            ReadDataToList(DateTime.Now.Year, DateTime.Now.Month); // 預設讀入現年現月的資料
+            //WriteDataToTable();
         }
 
         private void AddTitleBar()
@@ -214,77 +248,80 @@ namespace SpendTracker
             }
         }
 
-        private void WriteDataToTable()
+        private void WriteDataToTable(int CurrentPage = 1)
         {
             try
             {
-                // 每一頁呈現17筆資料(第17筆為花費加總)
-                for (int index = 0; index < 17; index++)
-                {
-                    // 動態新增一行
-                    table.RowCount++;
+                //int startIndex = CurrentPage == 1 ? 0 : 16;
 
-                    // 設定這一行的高度
-                    table.RowStyles.Add(new RowStyle(SizeType.Absolute, 24));
-                    int cellHeight = 24;
+                //// 每一頁呈現17筆資料(第17筆為花費加總)
+                //for (int index = startIndex; index < startIndex+17; index++)
+                //{
+                //    // 令各cell的寬度等於各欄位的寬度
+                //    labels[0].Width = (int)(table.Width * 0.1228);
+                //    labels[1].Width = (int)(table.Width * 0.1228);
+                //    labels[2].Width = (int)(table.Width * 0.1228);
+                //    labels[3].Width = (int)(table.Width * 0.1228);
+                //    labels[4].Width = (int)(table.Width * 0.1228);
+                //    labels[5].Width = (int)(table.Width * 0.3056);
+                //    labels[6].Width = (int)(table.Width * 0.0856);
 
-                    // 令每個欄位都顯示邊框
-                    table.CellBorderStyle = TableLayoutPanelCellBorderStyle.OutsetPartial;
+                //    // 將對應日期的資料寫入到各個cell
+                //    labels[0].Text = dailySpends[index].Date;
+                //    labels[1].Text = dailySpends[index].Food.ToString();
+                //    labels[2].Text = dailySpends[index].Transportation.ToString();
+                //    labels[3].Text = dailySpends[index].Other.ToString();
+                //    labels[4].Text = dailySpends[index].TotalAmount.ToString();
+                //    labels[5].Text = dailySpends[index].Remarks;
+                //    labels[6].Text = "編輯";
 
-                    int j = table.RowCount - 1;
+                //    // 將編輯用的cell連動到類別對應的資料，以方便之後抓取按鈕事件
+                //    dailySpends[index].EditField = labels[6];
 
-
-                    // 建立這筆資料的各個cell並添加到表格
-                    List<Label> labels = new List<Label>();
-                    for (int i = 0; i < 7; i++)
-                    {
-                        labels.Add(new Label
-                        {
-                            Height = cellHeight,
-                            Font = new Font("Microsoft JhengHei", 10, FontStyle.Regular),
-                            TextAlign = ContentAlignment.MiddleCenter
-                        });
-                        table.Controls.Add(labels.Last(), i, j);
-                    }
-
-                    // 令各cell的寬度等於各欄位的寬度
-                    labels[0].Width = (int)(table.Width * 0.1228);
-                    labels[1].Width = (int)(table.Width * 0.1228);
-                    labels[2].Width = (int)(table.Width * 0.1228);
-                    labels[3].Width = (int)(table.Width * 0.1228);
-                    labels[4].Width = (int)(table.Width * 0.1228);
-                    labels[5].Width = (int)(table.Width * 0.3056);
-                    labels[6].Width = (int)(table.Width * 0.0856);
-
-                    // 將對應日期的資料寫入到各個cell
-                    labels[0].Text = dailySpends[index].Date;
-                    labels[1].Text = dailySpends[index].Food.ToString();
-                    labels[2].Text = dailySpends[index].Transportation.ToString();
-                    labels[3].Text = dailySpends[index].Other.ToString();
-                    labels[4].Text = dailySpends[index].TotalAmount.ToString();
-                    labels[5].Text = dailySpends[index].Remarks;
-                    labels[6].Text = "編輯";
-
-                    // 將編輯用的cell連動到類別對應的資料，以方便之後抓取按鈕事件
-                    dailySpends[index].EditField = labels[6];
-
-                    // 最後一列用來呈現這個月的加總結果
-                    if(index == 16)
-                    {
-                        labels[0].Text = totalSpend.Date;
-                        labels[1].Text = totalSpend.Food.ToString();
-                        labels[2].Text = totalSpend.Transportation.ToString();
-                        labels[3].Text = totalSpend.Other.ToString();
-                        labels[4].Text = totalSpend.TotalAmount.ToString();
-                        labels[5].Text = "這個月的各項加總";
-                        labels[6].Text = "結算";
-                    }
-                }
+                //    // 最後一列用來呈現這個月的加總結果
+                //    if(index == startIndex + 16)
+                //    {
+                //        labels[0].Text = totalSpend.Date;
+                //        labels[1].Text = totalSpend.Food.ToString();
+                //        labels[2].Text = totalSpend.Transportation.ToString();
+                //        labels[3].Text = totalSpend.Other.ToString();
+                //        labels[4].Text = totalSpend.TotalAmount.ToString();
+                //        labels[5].Text = "這個月的各項加總";
+                //    }
+                //}
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message.PadRight(30, ' '), "Hint", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public void ArrangePageButton()
+        {
+            // 設置大小
+            GoBackButton.Size = new Size((int)(table.Width * 0.1), 24);
+            GoNextButton.Size = new Size((int)(table.Width * 0.1), 24);
+
+            // 設置相對位置
+            int x = (int)(Size.Width * 0.495) - (GoBackButton.Width) / 2;
+            GoBackButton.Location = (Point)new Size(x - 60, 585);
+            GoNextButton.Location = (Point)new Size(x + 60, 585);
+
+            // 設置文字內容
+            GoBackButton.Text = "上一頁";
+            GoNextButton.Text = "下一頁";
+        }
+
+        private void GoBackButton_Click(object sender, EventArgs e)
+        {
+            // 寫入前半個月的資料
+            WriteDataToTable(1);
+        }
+
+        private void GoNextButton_Click(object sender, EventArgs e)
+        {
+            // 寫入後半個月的資料
+            WriteDataToTable(2);
         }
     }
 }
