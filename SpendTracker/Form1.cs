@@ -28,7 +28,7 @@ namespace SpendTracker
             int RelativeWidth = (int)(Convert.ToInt32(DesktopWidthStr) * 0.8);
 
             // 調整主視窗的寬與高(將高度固定比較不容易在別台電腦跑版)
-            Size = new Size(RelativeWidth, 670);
+            Size = new Size(RelativeWidth, 690);
 
             // 令主視窗居中顯示
             int x = (SystemInformation.WorkingArea.Width - Size.Width) / 2;
@@ -46,11 +46,12 @@ namespace SpendTracker
         public void ArrangeComboBox1()
         {
             // 設置大小
-            comboBox1.Size = new Size(70, comboBox1.Height);
+            comboBox1.Size = new Size((int)(Size.Width * 0.08), comboBox1.Height);
 
             // 設置相對位置
             int x = (int)(Size.Width * 0.495) - (comboBox1.Width) / 2;
-            comboBox1.Location = (Point)new Size(x - 90, 23);
+            int y = (int)(Size.Height * 0.03);
+            comboBox1.Location = (Point)new Size(x - 140, y);
 
             // 預設內容
             comboBox1.Text = DateTime.Now.ToString("yyyy年");
@@ -59,11 +60,12 @@ namespace SpendTracker
         public void ArrangeComboBox2()
         {
             // 設置大小
-            comboBox2.Size = new Size(56, comboBox1.Height);
+            comboBox2.Size = new Size((int)(Size.Width * 0.06), comboBox1.Height);
 
             // 設置相對位置
             int x = (int)(Size.Width * 0.495) - (comboBox1.Width) / 2;
-            comboBox2.Location = (Point)new Size(x, 23);
+            int y = (int)(Size.Height * 0.03);
+            comboBox2.Location = (Point)new Size(x, y);
 
             // 預設內容
             comboBox2.Text = DateTime.Now.ToString("MM月");
@@ -72,11 +74,12 @@ namespace SpendTracker
         public void ArrangeSubmitButton()
         {
             // 設置大小
-            SubmitButton.Size = new Size(86, comboBox1.Height);
+            SubmitButton.Size = new Size((int)(Size.Width * 0.08), comboBox1.Height);
 
             // 設置相對位置
             int x = (int)(Size.Width * 0.495) - (comboBox1.Width) / 2;
-            SubmitButton.Location = (Point)new Size(x + 74, 23);
+            int y = (int)(Size.Height * 0.03);
+            SubmitButton.Location = (Point)new Size(x + 110, y);
 
             // 預設內容
             SubmitButton.Text = "送出查詢";
@@ -116,6 +119,22 @@ namespace SpendTracker
 
             // 令表格和容器的高度相同
             table.Height = panel1.Height;
+        }
+
+        public void ArrangePageButton()
+        {
+            // 設置大小
+            GoBackButton.Size = new Size((int)(table.Width * 0.1), comboBox1.Height);
+            GoNextButton.Size = new Size((int)(table.Width * 0.1), comboBox1.Height);
+
+            // 設置相對位置
+            int x = (int)(Size.Width * 0.495) - (GoBackButton.Width) / 2;
+            GoBackButton.Location = (Point)new Size(x - 80, 585);
+            GoNextButton.Location = (Point)new Size(x + 80, 585);
+
+            // 設置文字內容
+            GoBackButton.Text = "前半月";
+            GoNextButton.Text = "後半月";
         }
 
         // 主視窗的建構子，程序開始時會調用這個函數
@@ -379,22 +398,6 @@ namespace SpendTracker
             {
                 MessageBox.Show(ex.Message.PadRight(30, ' '), "Hint", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        public void ArrangePageButton()
-        {
-            // 設置大小
-            GoBackButton.Size = new Size((int)(table.Width * 0.1), 24);
-            GoNextButton.Size = new Size((int)(table.Width * 0.1), 24);
-
-            // 設置相對位置
-            int x = (int)(Size.Width * 0.495) - (GoBackButton.Width) / 2;
-            GoBackButton.Location = (Point)new Size(x - 60, 585);
-            GoNextButton.Location = (Point)new Size(x + 60, 585);
-
-            // 設置文字內容
-            GoBackButton.Text = "上一頁";
-            GoNextButton.Text = "下一頁";
         }
 
         private void GoBackButton_Click(object sender, EventArgs e)
