@@ -130,8 +130,12 @@ namespace SpendTracker
             ArrangePanel1();
             ArrangeTable();
             ArrangePageButton();
-            ReadDataToList(DateTime.Now.Year, DateTime.Now.Month); // 預設讀入現年現月的資料
-            WriteDataToTable();
+            
+            // 預設讀入現年現月的資料
+            ReadDataToList(DateTime.Now.Year, DateTime.Now.Month);
+
+            // 若現在的日期為後半月，則直接顯示第2頁的資料
+            WriteDataToTable(DateTime.Now.Day < 17 ? 1 : 2);
         }
 
         private void AddTitleBar()
@@ -323,18 +327,21 @@ namespace SpendTracker
             }
         }
 
-        private void WriteDataToTable(int CurrentPage = 1)
+        private void WriteDataToTable(int ShowPage = 1)
         {
             try
             {
+                // 紀錄要呈現的分頁
+                currentPage = ShowPage;
+
                 // 第一頁會呈現16筆資料 & 加總
                 // 第二頁會呈現(當月的天數 - 16)筆資料 & 加總
-                int end = CurrentPage == 1 ? 16 : dailySpends.Count - 16;
+                int end = ShowPage == 1 ? 16 : dailySpends.Count - 16;
 
-                // 透過頁數來對應特定日期的資料
-                int index = CurrentPage == 1 ? 0 : 16;
+                // 透過頁數來決定要載入前半月或是後半月的資料到表格
+                int index = ShowPage == 1 ? 0 : 16;
 
-                // 將各日期的資料寫入表格
+                // 將資料寫入表格
                 for (int i = 0; i < end; i++)
                 {
                     rowList[i][0].Text = dailySpends[index].Date;
@@ -392,16 +399,14 @@ namespace SpendTracker
 
         private void GoBackButton_Click(object sender, EventArgs e)
         {
-            // 寫入前半個月的資料
+            // 重新載入前半個月的資料 & 呈現第一頁
             WriteDataToTable(1);
-            currentPage = 1;
         }
 
         private void GoNextButton_Click(object sender, EventArgs e)
         {
-            // 寫入後半個月的資料
+            // 重新載入後半個月的資料 & 呈現第一頁
             WriteDataToTable(2);
-            currentPage = 2;
         }
 
         // 令所有控件啟用 DoubleBuffering，解決修改表格數據時介面會閃爍並卡住的問題
