@@ -138,7 +138,7 @@ namespace SpendTracker
         }
 
         // 主視窗的建構子，程序開始時會調用這個函數
-        // 所有預設的UI配置和預設讀入的資料，都是透過這個函數
+        // 所有預設的UI配置、表格預設的呈現資料，都是透過這個函數來加載
         public Form1()
         {
             InitializeComponent();
@@ -153,7 +153,8 @@ namespace SpendTracker
             // 預設讀入現年現月的資料
             ReadDataToList(DateTime.Now.Year, DateTime.Now.Month);
 
-            // 若現在的日期為後半月，則直接顯示第2頁的資料
+            // 預設呈現現年現月的資料
+            // 若現在的日期為後半月，則直接呈現後半月的資料
             WriteDataToTable(DateTime.Now.Day < 17 ? 1 : 2);
         }
 
@@ -164,10 +165,10 @@ namespace SpendTracker
                 // 動態新增一行
                 table.RowCount++;
 
-                // 設定這一行的高度
+                // 設定行高
                 table.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
 
-                // 令每個欄位都顯示邊框
+                // 設置 cell 的邊框
                 table.CellBorderStyle = TableLayoutPanelCellBorderStyle.OutsetPartial;
 
                 int j = table.RowCount - 1;
@@ -210,17 +211,17 @@ namespace SpendTracker
 
         private void AddDataRow()
         {
-            // 創建 17 列，每列有 7 個cell
+            // 創建 17 列，每列有 7 個 cell
             for (int index = 0; index < 17; index++)
             {
                 // 動態新增一行
                 table.RowCount++;
 
-                // 設定這一行的高度
+                // 設定行高
                 table.RowStyles.Add(new RowStyle(SizeType.Absolute, 24));
                 int cellHeight = 24;
 
-                // 令每個欄位都顯示邊框
+                // 設置 cell 的邊框
                 table.CellBorderStyle = TableLayoutPanelCellBorderStyle.OutsetPartial;
 
                 int j = table.RowCount - 1;
@@ -238,7 +239,7 @@ namespace SpendTracker
                     table.Controls.Add(rowList.Last().Last(), i, j);
                 }
 
-                // 令各cell的寬度等於各欄位的寬度
+                // 令各個 cell 的寬度等於各欄位的寬度
                 rowList.Last()[0].Width = (int)(table.Width * 0.1228);
                 rowList.Last()[1].Width = (int)(table.Width * 0.1228);
                 rowList.Last()[2].Width = (int)(table.Width * 0.1228);
@@ -276,16 +277,22 @@ namespace SpendTracker
         public int GetDayOfCurrentMonth()
         {
             // 取得下拉選單的年與月
-            // Todo
-
-            // Todo
+            int year = Convert.ToInt32(comboBox1.Text.Substring(0, 4));
+            int month = Convert.ToInt32(comboBox2.Text.Substring(0, 2));
 
             // 透過月份取得天數
-            // Todo
+            int[] dayOfMonth = new int[] { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-            // 若是二月且年分為閏年，則修改天數
-            // Todo
-            return 28;
+            // 若是2月且為閏年，則將天數修改為29
+            if(month == 2)
+            {
+                if ((year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0))
+                {
+                    return 29;
+                }
+            }
+
+            return dayOfMonth[month];
         }
 
         private void ReadDataToList(int year, int month)
@@ -312,6 +319,8 @@ namespace SpendTracker
                 int Transportation = 0;
                 int Other = 0;
                 int TotalAmount = 0;
+
+                // 取得這個月的天數
                 int numOfDay = GetDayOfCurrentMonth();
 
                 for (int i = 0; i < numOfDay; i++)
@@ -402,17 +411,17 @@ namespace SpendTracker
 
         private void GoBackButton_Click(object sender, EventArgs e)
         {
-            // 重新載入前半個月的資料 & 呈現第一頁
+            // 將前半月的資料寫入表格
             WriteDataToTable(1);
         }
 
         private void GoNextButton_Click(object sender, EventArgs e)
         {
-            // 重新載入後半個月的資料 & 呈現第一頁
+            // 將後半月的資料寫入表格
             WriteDataToTable(2);
         }
 
-        // 令所有控件啟用 DoubleBuffering，解決修改表格數據時介面會閃爍並卡住的問題
+        // 令所有控件啟用 Double Buffering，解決修改表格數據時介面會閃爍並卡住的問題
         protected override CreateParams CreateParams
         {
             get
