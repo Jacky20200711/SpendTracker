@@ -53,8 +53,14 @@ namespace SpendTracker
             int y = (int)(Size.Height * 0.03);
             comboBox1.Location = (Point)new Size(x - 140, y);
 
-            // 預設內容
+            // 預設內容為現在的年份
             comboBox1.Text = DateTime.Now.ToString("yyyy年");
+
+            // 只能選擇最近三年的年份，想查詢更舊的年分必須手動輸入
+            int currentYear = DateTime.Now.Year;
+            comboBox1.Items.Add(currentYear.ToString() + "年");
+            comboBox1.Items.Add((currentYear - 1).ToString() + "年");
+            comboBox1.Items.Add((currentYear - 2).ToString() + "年");
         }
 
         public void ArrangeComboBox2()
@@ -67,8 +73,14 @@ namespace SpendTracker
             int y = (int)(Size.Height * 0.03);
             comboBox2.Location = (Point)new Size(x, y);
 
-            // 預設內容
+            // 預設內容為現在的月份
             comboBox2.Text = DateTime.Now.ToString("MM月");
+
+            // 可以選擇1~12月
+            for(int i = 12; i > 0; i--)
+            {
+                comboBox2.Items.Add(i.ToString() + "月");
+            }
         }
 
         public void ArrangeSubmitButton()
@@ -430,6 +442,11 @@ namespace SpendTracker
                 cp.ExStyle |= 0x02000000;
                 return cp;
             }
+        }
+
+        private void SubmitButton_Click(object sender, EventArgs e)
+        {
+            // _ = (string)comboBox1.SelectedItem;
         }
     }
 }
