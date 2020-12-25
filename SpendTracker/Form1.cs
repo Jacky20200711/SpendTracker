@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace SpendTracker
 {
-    public partial class Form1 : Form
+    public partial class MainWindow : Form
     {
         TableLayoutPanel table = new TableLayoutPanel();
         List<Button> titleBar = new List<Button>();
@@ -19,7 +19,7 @@ namespace SpendTracker
         List<List<Label>> rowList = new List<List<Label>>();
         int currentPage = 1;
 
-        public void ArrangeForm1()
+        public void ArrangeMainWindow()
         {
             // 取得螢幕的寬度
             string DesktopWidthStr = SystemInformation.PrimaryMonitorSize.Width.ToString();
@@ -43,53 +43,53 @@ namespace SpendTracker
             FormBorderStyle = FormBorderStyle.FixedDialog;
         }
 
-        public void ArrangeComboBox1()
+        public void ArrangeSelectorOfYear()
         {
             // 設置大小
-            comboBox1.Size = new Size((int)(Size.Width * 0.08), comboBox1.Height);
+            SelectorOfYear.Size = new Size((int)(Size.Width * 0.08), SelectorOfYear.Height);
 
             // 設置相對位置
-            int x = (int)(Size.Width * 0.495) - (comboBox1.Width) / 2;
+            int x = (int)(Size.Width * 0.495) - (SelectorOfYear.Width) / 2;
             int y = (int)(Size.Height * 0.03);
-            comboBox1.Location = (Point)new Size(x - 140, y);
+            SelectorOfYear.Location = (Point)new Size(x - 140, y);
 
             // 預設內容為現在的年份
-            comboBox1.Text = DateTime.Now.ToString("yyyy年");
+            SelectorOfYear.Text = DateTime.Now.ToString("yyyy年");
 
             // 只能選擇最近三年的年份，想查詢更舊的年分必須手動輸入
             int currentYear = DateTime.Now.Year;
-            comboBox1.Items.Add(currentYear.ToString() + "年");
-            comboBox1.Items.Add((currentYear - 1).ToString() + "年");
-            comboBox1.Items.Add((currentYear - 2).ToString() + "年");
+            SelectorOfYear.Items.Add(currentYear.ToString() + "年");
+            SelectorOfYear.Items.Add((currentYear - 1).ToString() + "年");
+            SelectorOfYear.Items.Add((currentYear - 2).ToString() + "年");
         }
 
-        public void ArrangeComboBox2()
+        public void ArrangeSelectorOfMonth()
         {
             // 設置大小
-            comboBox2.Size = new Size((int)(Size.Width * 0.06), comboBox1.Height);
+            SelectorOfMonth.Size = new Size((int)(Size.Width * 0.06), SelectorOfYear.Height);
 
             // 設置相對位置
-            int x = (int)(Size.Width * 0.495) - (comboBox1.Width) / 2;
+            int x = (int)(Size.Width * 0.495) - (SelectorOfYear.Width) / 2;
             int y = (int)(Size.Height * 0.03);
-            comboBox2.Location = (Point)new Size(x, y);
+            SelectorOfMonth.Location = (Point)new Size(x, y);
 
             // 預設內容為現在的月份
-            comboBox2.Text = DateTime.Now.ToString("MM月");
+            SelectorOfMonth.Text = DateTime.Now.ToString("MM月");
 
             // 可以選擇1~12月
             for(int i = 12; i > 0; i--)
             {
-                comboBox2.Items.Add(i.ToString() + "月");
+                SelectorOfMonth.Items.Add(i.ToString() + "月");
             }
         }
 
         public void ArrangeSubmitButton()
         {
             // 設置大小
-            SubmitButton.Size = new Size((int)(Size.Width * 0.08), comboBox1.Height);
+            SubmitButton.Size = new Size((int)(Size.Width * 0.08), SelectorOfYear.Height);
 
             // 設置相對位置
-            int x = (int)(Size.Width * 0.495) - (comboBox1.Width) / 2;
+            int x = (int)(Size.Width * 0.495) - (SelectorOfYear.Width) / 2;
             int y = (int)(Size.Height * 0.03);
             SubmitButton.Location = (Point)new Size(x + 110, y);
 
@@ -97,21 +97,21 @@ namespace SpendTracker
             SubmitButton.Text = "送出查詢";
         }
 
-        public void ArrangePanel1()
+        public void ArrangeContainerOfTable()
         {
             // 設置相對寬度 & 將高度固定比較不容易跑版
-            panel1.Size = new Size((int)(Size.Width * 0.9), 504);
+            ContainerOfTable.Size = new Size((int)(Size.Width * 0.9), 504);
 
             // 設置相對位置
-            int x = (int)(Size.Width * 0.495) - (panel1.Width) / 2;
+            int x = (int)(Size.Width * 0.495) - (ContainerOfTable.Width) / 2;
             int y = (int)(Size.Height * 0.09);
-            panel1.Location = (Point)new Size(x, y);
+            ContainerOfTable.Location = (Point)new Size(x, y);
         }
 
         public void ArrangeTable()
         {
             // 添加表格到容器 & 令表格填滿容器
-            panel1.Controls.Add(table);
+            ContainerOfTable.Controls.Add(table);
             table.Dock = DockStyle.Top;
 
             // 利用百分比來分配每個欄位的寬度
@@ -130,14 +130,14 @@ namespace SpendTracker
             AddDataRow();
 
             // 令表格和容器的高度相同
-            table.Height = panel1.Height;
+            table.Height = ContainerOfTable.Height;
         }
 
         public void ArrangePageButton()
         {
             // 設置大小
-            GoBackButton.Size = new Size((int)(table.Width * 0.1), comboBox1.Height);
-            GoNextButton.Size = new Size((int)(table.Width * 0.1), comboBox1.Height);
+            GoBackButton.Size = new Size((int)(table.Width * 0.1), SelectorOfYear.Height);
+            GoNextButton.Size = new Size((int)(table.Width * 0.1), SelectorOfYear.Height);
 
             // 設置相對位置
             int x = (int)(Size.Width * 0.495) - (GoBackButton.Width) / 2;
@@ -151,14 +151,14 @@ namespace SpendTracker
 
         // 主視窗的建構子，程序開始時會調用這個函數
         // 所有預設的UI配置、表格預設的呈現資料，都是透過這個函數來加載
-        public Form1()
+        public MainWindow()
         {
             InitializeComponent();
-            ArrangeForm1();
-            ArrangeComboBox1();
-            ArrangeComboBox2();
+            ArrangeMainWindow();
+            ArrangeSelectorOfYear();
+            ArrangeSelectorOfMonth();
             ArrangeSubmitButton();
-            ArrangePanel1();
+            ArrangeContainerOfTable();
             ArrangeTable();
             ArrangePageButton();
             
@@ -289,8 +289,8 @@ namespace SpendTracker
         public int GetDayOfCurrentMonth()
         {
             // 取得下拉選單的年與月
-            int year = Convert.ToInt32(comboBox1.Text.Substring(0, 4));
-            int month = Convert.ToInt32(comboBox2.Text.Substring(0, 2));
+            int year = Convert.ToInt32(SelectorOfYear.Text.Substring(0, 4));
+            int month = Convert.ToInt32(SelectorOfMonth.Text.Substring(0, 2));
 
             // 透過月份取得天數
             int[] dayOfMonth = new int[] { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
