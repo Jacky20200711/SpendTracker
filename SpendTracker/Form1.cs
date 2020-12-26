@@ -16,19 +16,19 @@ namespace SpendTracker
         List<Button> titleBar = new List<Button>();
         List<DailySpend> dailySpends = new List<DailySpend>();
         DailySpend totalSpend = new DailySpend();
-        List<List<Label>> rowList = new List<List<Label>>();
+        List<List<TextBox>> rowList = new List<List<TextBox>>();
         int currentPage = 1;
 
         public void ArrangeMainWindow()
         {
-            // 取得螢幕的寬度
+            // 取得螢幕的解析度
             string DesktopWidthStr = SystemInformation.PrimaryMonitorSize.Width.ToString();
+            string DesktopHeightStr = SystemInformation.PrimaryMonitorSize.Height.ToString();
 
-            // 設置適應螢幕的寬度
+            // 調整主視窗的大小
             int RelativeWidth = (int)(Convert.ToInt32(DesktopWidthStr) * 0.8);
-
-            // 調整主視窗的寬與高(將高度固定比較不容易在別台電腦跑版)
-            Size = new Size(RelativeWidth, 690);
+            int RelativeHeight = (int)(Convert.ToInt32(DesktopHeightStr) * 0.8);
+            Size = new Size(RelativeWidth, RelativeHeight);
 
             // 令主視窗居中顯示
             int x = (SystemInformation.WorkingArea.Width - Size.Width) / 2;
@@ -51,7 +51,7 @@ namespace SpendTracker
             // 設置相對位置
             int x = (int)(Size.Width * 0.495) - (SelectorOfYear.Width) / 2;
             int y = (int)(Size.Height * 0.03);
-            SelectorOfYear.Location = (Point)new Size(x - 140, y);
+            SelectorOfYear.Location = (Point)new Size(x - (int)(Width * 0.16), y);
 
             // 預設內容為現在的年份
             SelectorOfYear.Text = DateTime.Now.ToString("yyyy年");
@@ -71,7 +71,7 @@ namespace SpendTracker
             // 設置相對位置
             int x = (int)(Size.Width * 0.495) - (SelectorOfYear.Width) / 2;
             int y = (int)(Size.Height * 0.03);
-            SelectorOfMonth.Location = (Point)new Size(x, y);
+            SelectorOfMonth.Location = (Point)new Size(x - (int)(Width * 0.06), y);
 
             // 預設內容為現在的月份
             SelectorOfMonth.Text = DateTime.Now.ToString("MM月");
@@ -91,20 +91,37 @@ namespace SpendTracker
             // 設置相對位置
             int x = (int)(Size.Width * 0.495) - (SelectorOfYear.Width) / 2;
             int y = (int)(Size.Height * 0.03);
-            SubmitButton.Location = (Point)new Size(x + 110, y);
+            SubmitButton.Location = (Point)new Size(x + (int)(Width * 0.02), y);
 
             // 預設內容
             SubmitButton.Text = "送出查詢";
         }
 
+        public void ArrangePageButton()
+        {
+            // 設置大小
+            GoBackButton.Size = new Size((int)(Size.Width * 0.08), SelectorOfYear.Height);
+            GoNextButton.Size = new Size((int)(Size.Width * 0.08), SelectorOfYear.Height);
+
+            // 設置相對位置
+            int x = (int)(Size.Width * 0.495) - (SelectorOfYear.Width) / 2;
+            int y = (int)(Size.Height * 0.03);
+            GoBackButton.Location = (Point)new Size(x + (int)(Width * 0.117), y);
+            GoNextButton.Location = (Point)new Size(x + (int)(Width * 0.214), y);
+
+            // 設置文字內容
+            GoBackButton.Text = "前半月";
+            GoNextButton.Text = "後半月";
+        }
+
         public void ArrangeContainerOfTable()
         {
-            // 設置相對寬度 & 將高度固定比較不容易跑版
-            ContainerOfTable.Size = new Size((int)(Size.Width * 0.9), 504);
+            // 設置相對大小
+            ContainerOfTable.Size = new Size((int)(Size.Width * 0.9), (int)(Size.Height * 0.78));
 
             // 設置相對位置
             int x = (int)(Size.Width * 0.495) - (ContainerOfTable.Width) / 2;
-            int y = (int)(Size.Height * 0.09);
+            int y = (int)(Size.Height * 0.089);
             ContainerOfTable.Location = (Point)new Size(x, y);
         }
 
@@ -131,22 +148,9 @@ namespace SpendTracker
 
             // 令表格和容器的高度相同
             table.Height = ContainerOfTable.Height;
-        }
 
-        public void ArrangePageButton()
-        {
-            // 設置大小
-            GoBackButton.Size = new Size((int)(table.Width * 0.1), SelectorOfYear.Height);
-            GoNextButton.Size = new Size((int)(table.Width * 0.1), SelectorOfYear.Height);
-
-            // 設置相對位置
-            int x = (int)(Size.Width * 0.495) - (GoBackButton.Width) / 2;
-            GoBackButton.Location = (Point)new Size(x - 80, 585);
-            GoNextButton.Location = (Point)new Size(x + 80, 585);
-
-            // 設置文字內容
-            GoBackButton.Text = "前半月";
-            GoNextButton.Text = "後半月";
+            // 設置 cell 的邊框
+            table.CellBorderStyle = TableLayoutPanelCellBorderStyle.OutsetPartial;
         }
 
         // 主視窗的建構子，程序開始時會調用這個函數
@@ -180,11 +184,6 @@ namespace SpendTracker
                 // 設定行高
                 table.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
 
-                // 設置 cell 的邊框
-                table.CellBorderStyle = TableLayoutPanelCellBorderStyle.OutsetPartial;
-
-                int j = table.RowCount - 1;
-
                 // 創建按鈕並將按鈕添加到表格的第一列
                 for(int i = 0; i < 7; i++)
                 {
@@ -194,7 +193,9 @@ namespace SpendTracker
                         Font = new Font("Microsoft JhengHei", 10, FontStyle.Regular),
                         TextAlign = ContentAlignment.MiddleCenter
                     });
-                    table.Controls.Add(titleBar.Last(), i, j);
+
+                    // 添加到對應的cell
+                    table.Controls.Add(titleBar.Last(), i, table.RowCount - 1);
                 }
 
                 // 令各按鈕的寬度等於各欄位的寬度
@@ -230,25 +231,24 @@ namespace SpendTracker
                 table.RowCount++;
 
                 // 設定行高
-                table.RowStyles.Add(new RowStyle(SizeType.Absolute, 24));
-                int cellHeight = 24;
-
-                // 設置 cell 的邊框
-                table.CellBorderStyle = TableLayoutPanelCellBorderStyle.OutsetPartial;
-
-                int j = table.RowCount - 1;
+                int cellHeight = 36;
+                table.RowStyles.Add(new RowStyle(SizeType.Absolute, cellHeight));
 
                 // 建立這一列的 cell 並添加到表格
-                rowList.Add(new List<Label>());
+                rowList.Add(new List<TextBox>());
                 for (int i = 0; i < 7; i++)
                 {
-                    rowList.Last().Add(new Label
+                    rowList.Last().Add(new TextBox
                     {
-                        Height = cellHeight,
                         Font = new Font("Microsoft JhengHei", 10, FontStyle.Regular),
-                        TextAlign = ContentAlignment.MiddleCenter
                     });
-                    table.Controls.Add(rowList.Last().Last(), i, j);
+
+                    // 添加到對應的cell
+                    table.Controls.Add(rowList.Last().Last(), i, table.RowCount - 1);
+
+                    // 修改 TextBox 的高度
+                    rowList.Last().Last().Multiline = true;
+                    rowList.Last().Last().Height = cellHeight;
                 }
 
                 // 令各個 cell 的寬度等於各欄位的寬度
@@ -259,31 +259,7 @@ namespace SpendTracker
                 rowList.Last()[4].Width = (int)(table.Width * 0.1228);
                 rowList.Last()[5].Width = (int)(table.Width * 0.3056);
                 rowList.Last()[6].Width = (int)(table.Width * 0.0856);
-
             }
-
-            // 若用迴圈綁定會有BUG，所以手動綁定 label & click 事件
-            rowList[0][6].Click += delegate { GoEditPage(currentPage == 1 ? 0 : 16); };
-            rowList[1][6].Click += delegate { GoEditPage(currentPage == 1 ? 1 : 17); };
-            rowList[2][6].Click += delegate { GoEditPage(currentPage == 1 ? 2 : 18); };
-            rowList[3][6].Click += delegate { GoEditPage(currentPage == 1 ? 3 : 19); };
-            rowList[4][6].Click += delegate { GoEditPage(currentPage == 1 ? 4 : 20); };
-            rowList[5][6].Click += delegate { GoEditPage(currentPage == 1 ? 5 : 21); };
-            rowList[6][6].Click += delegate { GoEditPage(currentPage == 1 ? 6 : 22); };
-            rowList[7][6].Click += delegate { GoEditPage(currentPage == 1 ? 7 : 23); };
-            rowList[8][6].Click += delegate { GoEditPage(currentPage == 1 ? 8 : 24); };
-            rowList[9][6].Click += delegate { GoEditPage(currentPage == 1 ? 9 : 25); };
-            rowList[10][6].Click += delegate { GoEditPage(currentPage == 1 ? 10 : 26); };
-            rowList[11][6].Click += delegate { GoEditPage(currentPage == 1 ? 11 : 27); };
-            rowList[12][6].Click += delegate { GoEditPage(currentPage == 1 ? 12 : 28); };
-            rowList[13][6].Click += delegate { GoEditPage(currentPage == 1 ? 13 : 29); };
-            rowList[14][6].Click += delegate { GoEditPage(currentPage == 1 ? 14 : 30); };
-            rowList[15][6].Click += delegate { GoEditPage(currentPage == 1 ? 15 : 31); };
-        }
-
-        public void GoEditPage(int index)
-        {
-            MessageBox.Show(index.ToString(), "Test");
         }
 
         public int GetDayOfCurrentMonth()
