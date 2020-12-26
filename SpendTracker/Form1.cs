@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -262,12 +263,8 @@ namespace SpendTracker
             }
         }
 
-        public int GetDayOfCurrentMonth()
+        public int GetDayOfTargetMonth(int year, int month)
         {
-            // 取得下拉選單的年與月
-            int year = Convert.ToInt32(SelectorOfYear.Text.Substring(0, 4));
-            int month = Convert.ToInt32(SelectorOfMonth.Text.Substring(0, 2));
-
             // 透過月份取得天數
             int[] dayOfMonth = new int[] { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
@@ -290,17 +287,48 @@ namespace SpendTracker
                 // 要裝載某個月的資料前先清空容器
                 dailySpends.Clear();
 
-                // 進入當前年月的資料夾(若該資料夾不存在則創建)
-                // Todo ...
+                // 取得該年該月份的天數
+                int numOfDay = GetDayOfTargetMonth(year, month);
 
-                // 取得各個檔名並將檔名排序(若該檔案不存在則創建)
-                // Todo ...
+                try
+                {
+                    // 進入該年的資料夾(若不存在則創建)
+                    string TargetDir = year.ToString();
 
-                // 取得各個檔名並將檔名排序
-                // Todo ...
+                    if (!Directory.Exists(TargetDir))
+                    {
+                        Directory.CreateDirectory(TargetDir);
+                    }
 
-                // 讀取檔案並寫入類別
-                // Todo ...
+                    Directory.SetCurrentDirectory(TargetDir);
+
+                    // 開啟該月的檔案(若不存在則創建)
+                    string monthStr = month.ToString("D2");
+                    string targetFile = $"{year}-{monthStr}.txt";
+
+                    if (!File.Exists(targetFile))
+                    {
+                        // 新增檔案 & 對應的串流
+                        StreamWriter sw = new StreamWriter(targetFile);
+
+                        // 透過串流寫入資料(資料筆數 = 該月的天數)
+                        for (int i = 0; i < numOfDay; i++)
+                        {
+                            sw.WriteLine("Hello World!!!!");
+                        }
+
+                        // 關閉串流
+                        sw.Close();
+                    }
+
+                    // 讀取檔案內容
+                    // Todo ...
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.ToString(), "Error");
+                    return;
+                }
 
                 // 將測試用的假資料寫入類別 & 計算各項花費的加總
                 int Food = 0;
@@ -308,10 +336,7 @@ namespace SpendTracker
                 int Other = 0;
                 int TotalAmount = 0;
 
-                // 取得這個月的天數
-                int numOfDay = GetDayOfCurrentMonth();
-
-                for (int i = 0; i < numOfDay; i++)
+                for (int i = 0; i < 28; i++)
                 {
                     dailySpends.Add(new DailySpend 
                     {
