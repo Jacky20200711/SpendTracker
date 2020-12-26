@@ -20,6 +20,10 @@ namespace SpendTracker
         List<List<TextBox>> rowList = new List<List<TextBox>>();
         int currentPage = 1;
 
+        // 紀錄當前載入的是何年何月的資料，預設為現年現月
+        int currentYear = DateTime.Now.Year;
+        int currentMonth = DateTime.Now.Month;
+
         public void ArrangeMainWindow()
         {
             // 取得螢幕的解析度
@@ -28,7 +32,7 @@ namespace SpendTracker
 
             // 調整主視窗的大小
             int RelativeWidth = (int)(Convert.ToInt32(DesktopWidthStr) * 0.8);
-            int RelativeHeight = (int)(Convert.ToInt32(DesktopHeightStr) * 0.8);
+            int RelativeHeight = (int)(Convert.ToInt32(DesktopHeightStr) * 0.84);
             Size = new Size(RelativeWidth, RelativeHeight);
 
             // 令主視窗居中顯示
@@ -58,7 +62,6 @@ namespace SpendTracker
             SelectorOfYear.Text = DateTime.Now.ToString("yyyy年");
 
             // 只能選擇最近三年的年份，想查詢更舊的年分必須手動輸入
-            int currentYear = DateTime.Now.Year;
             SelectorOfYear.Items.Add(currentYear.ToString() + "年");
             SelectorOfYear.Items.Add((currentYear - 1).ToString() + "年");
             SelectorOfYear.Items.Add((currentYear - 2).ToString() + "年");
@@ -166,61 +169,49 @@ namespace SpendTracker
             ArrangeContainerOfTable();
             ArrangeTable();
             ArrangePageButton();
-            
-            // 預設讀入現年現月的資料
-            ReadDataToList(DateTime.Now.Year, DateTime.Now.Month);
-
-            // 預設呈現現年現月的資料
-            // 若現在的日期為後半月，則直接呈現後半月的資料
-            WriteDataToTable(DateTime.Now.Day < 17 ? 1 : 2);
+            ReadDataToList(currentYear, currentMonth);
+            WriteDataToTable(DateTime.Now.Day < 17 ? 1 : 2); // 若現在的日期為後半月，則直接呈現後半月的資料
         }
 
         private void AddTitleBar()
         {
-            try
+            // 動態新增一行
+            table.RowCount++;
+
+            // 設定行高
+            table.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
+
+            // 創建按鈕並將按鈕添加到表格的第一列
+            for(int i = 0; i < 7; i++)
             {
-                // 動態新增一行
-                table.RowCount++;
-
-                // 設定行高
-                table.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
-
-                // 創建按鈕並將按鈕添加到表格的第一列
-                for(int i = 0; i < 7; i++)
+                titleBar.Add(new Button
                 {
-                    titleBar.Add(new Button
-                    {
-                        Height = 40,
-                        Font = new Font("Microsoft JhengHei", 10, FontStyle.Regular),
-                        TextAlign = ContentAlignment.MiddleCenter
-                    });
+                    Height = 40,
+                    Font = new Font("Microsoft JhengHei", 10, FontStyle.Regular),
+                    TextAlign = ContentAlignment.MiddleCenter
+                });
 
-                    // 添加到對應的cell
-                    table.Controls.Add(titleBar.Last(), i, table.RowCount - 1);
-                }
-
-                // 令各按鈕的寬度等於各欄位的寬度
-                titleBar[0].Width = (int)(table.Width * 0.1228);
-                titleBar[1].Width = (int)(table.Width * 0.1228);
-                titleBar[2].Width = (int)(table.Width * 0.1228);
-                titleBar[3].Width = (int)(table.Width * 0.1228);
-                titleBar[4].Width = (int)(table.Width * 0.1228);
-                titleBar[5].Width = (int)(table.Width * 0.3056);
-                titleBar[6].Width = (int)(table.Width * 0.0856);
-
-                // 設置各按鈕的文字內容
-                titleBar[0].Text = "日期";
-                titleBar[1].Text = "伙食費";
-                titleBar[2].Text = "交通費";
-                titleBar[3].Text = "學雜費";
-                titleBar[4].Text = "總花費";
-                titleBar[5].Text = "備註";
-                titleBar[6].Text = "編輯";
+                // 添加到對應的cell
+                table.Controls.Add(titleBar.Last(), i, table.RowCount - 1);
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message.PadRight(30, ' '), "Hint", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+
+            // 令各按鈕的寬度等於各欄位的寬度
+            titleBar[0].Width = (int)(table.Width * 0.1228);
+            titleBar[1].Width = (int)(table.Width * 0.1228);
+            titleBar[2].Width = (int)(table.Width * 0.1228);
+            titleBar[3].Width = (int)(table.Width * 0.1228);
+            titleBar[4].Width = (int)(table.Width * 0.1228);
+            titleBar[5].Width = (int)(table.Width * 0.3056);
+            titleBar[6].Width = (int)(table.Width * 0.0856);
+
+            // 設置各按鈕的文字內容
+            titleBar[0].Text = "日期";
+            titleBar[1].Text = "伙食費";
+            titleBar[2].Text = "交通費";
+            titleBar[3].Text = "學雜費";
+            titleBar[4].Text = "總花費";
+            titleBar[5].Text = "備註";
+            titleBar[6].Text = "編輯";
         }
 
         private void AddDataRow()
@@ -284,77 +275,88 @@ namespace SpendTracker
         {
             try
             {
+                // 更新當前載入的資料日期
+                currentYear = year;
+                currentMonth = month;
+
                 // 要裝載某個月的資料前先清空容器
                 dailySpends.Clear();
 
                 // 取得該年該月份的天數
                 int numOfDay = GetDayOfTargetMonth(year, month);
 
-                try
+                // 進入該年的資料夾(若不存在則創建)
+                string TargetDir = year.ToString();
+
+                if (!Directory.Exists(TargetDir))
                 {
-                    // 進入該年的資料夾(若不存在則創建)
-                    string TargetDir = year.ToString();
-
-                    if (!Directory.Exists(TargetDir))
-                    {
-                        Directory.CreateDirectory(TargetDir);
-                    }
-
-                    Directory.SetCurrentDirectory(TargetDir);
-
-                    // 開啟該月的檔案(若不存在則創建)
-                    string monthStr = month.ToString("D2");
-                    string targetFile = $"{year}-{monthStr}.txt";
-
-                    if (!File.Exists(targetFile))
-                    {
-                        // 新增檔案 & 對應的串流
-                        StreamWriter sw = new StreamWriter(targetFile);
-
-                        // 透過串流寫入資料(資料筆數 = 該月的天數)
-                        for (int i = 0; i < numOfDay; i++)
-                        {
-                            sw.WriteLine("Hello World!!!!");
-                        }
-
-                        // 關閉串流
-                        sw.Close();
-                    }
-
-                    // 讀取檔案內容
-                    // Todo ...
-                }
-                catch(Exception ex)
-                {
-                    MessageBox.Show(ex.ToString(), "Error");
-                    return;
+                    Directory.CreateDirectory(TargetDir);
                 }
 
-                // 將測試用的假資料寫入類別 & 計算各項花費的加總
+                Directory.SetCurrentDirectory(TargetDir);
+
+                // 開啟該月的檔案(若不存在則創建)
+                string monthStr = month.ToString("D2");
+                string targetFile = $"{year}-{monthStr}.txt";
+                StreamWriter fileForWrite;
+
+                if (!File.Exists(targetFile))
+                {
+                    // 新增檔案
+                    fileForWrite = new StreamWriter(targetFile);
+
+                    // 透過串流寫入每一日的預設資料(資料筆數 = 該月的天數)
+                    for (int i = 0; i < numOfDay; i++)
+                    {
+                        string currentDay = (i+1).ToString("D2");
+                        fileForWrite.WriteLine($"{year}-{monthStr}-{currentDay},0,0,0,0,無");
+                    }
+
+                    // 關閉檔案
+                    fileForWrite.Close();
+                }
+
+                // 讀取檔案內容(逐行讀取)
+                StreamReader fileForRead = new StreamReader(targetFile);
+                string line;
                 int Food = 0;
                 int Transportation = 0;
                 int Other = 0;
                 int TotalAmount = 0;
 
-                for (int i = 0; i < 28; i++)
+                while ((line = fileForRead.ReadLine()) != null)
                 {
-                    dailySpends.Add(new DailySpend 
+                    string[] dataOfDay = line.Split(',');
+                    List<string> splitedRemarks = new List<string>();
+
+                    // 備註裡面可能含有逗號，若被切割則必須組裝回去
+                    for(int i = 5; i < dataOfDay.Length; i++)
                     {
-                        Date = "2020-12-23",
-                        Food = i+1,
-                        Transportation = 123,
-                        Other = 456,
-                        TotalAmount = 123456,
-                        Remarks = "測試測試測試測試測試測試測試測試測試"
+                        splitedRemarks.Add(dataOfDay[i]);
+                    }
+
+                    string remark = string.Join("", splitedRemarks);
+
+                    dailySpends.Add(new DailySpend
+                    {
+                        Date = dataOfDay[0],
+                        Food = Convert.ToInt32(dataOfDay[1]),
+                        Transportation = Convert.ToInt32(dataOfDay[2]),
+                        Other = Convert.ToInt32(dataOfDay[3]),
+                        TotalAmount = Convert.ToInt32(dataOfDay[4]),
+                        Remarks = remark
                     });
 
+                    // 累計各項花費
                     Food += dailySpends.Last().Food;
                     Transportation += dailySpends.Last().Transportation;
                     Other += dailySpends.Last().Other;
                     TotalAmount += dailySpends.Last().TotalAmount;
                 }
 
-                // 紀錄各項花費的加總結果
+                fileForRead.Close();
+
+                // 紀錄各項花費的加總
                 totalSpend.Date = dailySpends[0].Date.Substring(0, 7);
                 totalSpend.Food = Food;
                 totalSpend.Transportation = Transportation;
@@ -362,9 +364,12 @@ namespace SpendTracker
                 totalSpend.TotalAmount = TotalAmount;
                 totalSpend.Remarks = "各項花費的加總";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.ToString(), "Error");
+                string monthStr = currentMonth.ToString("D2");
+                string targetFile = $"{currentYear}-{monthStr}.txt";
+                string ErrorMessage = $"讀取失敗，請到資料夾{currentYear}下查看{targetFile}的資料是否異常!";
+                MessageBox.Show(ErrorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -416,9 +421,12 @@ namespace SpendTracker
                 rowList[^1][5].Text = totalSpend.Remarks;
                 rowList[^1][6].Text = "----";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message.PadRight(30, ' '), "Hint", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string monthStr = currentMonth.ToString("D2");
+                string targetFile = $"{currentYear}-{monthStr}.txt";
+                string ErrorMessage = $"讀取失敗，請到資料夾{currentYear}下查看{targetFile}的資料是否異常!";
+                MessageBox.Show(ErrorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
