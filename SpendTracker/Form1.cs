@@ -20,6 +20,7 @@ namespace SpendTracker
         List<List<TextBox>> rowList = new List<List<TextBox>>();
         int currentPage = 1;
         int IntervalOfTopTool = 20;
+        float[] cellWidthOfRow;
 
         // 紀錄當前載入的是何年何月的資料，預設為現年現月
         int currentYear = DateTime.Now.Year;
@@ -166,14 +167,24 @@ namespace SpendTracker
             ContainerOfTable.Controls.Add(table);
             table.Dock = DockStyle.Top;
 
+            // 此變數會連動各個欄位的寬度 & 欄位內的控件寬度
+            cellWidthOfRow = new float[6]
+            {
+                table.Width * 0.123f,
+                table.Width * 0.123f,
+                table.Width * 0.123f,
+                table.Width * 0.123f,
+                table.Width * 0.123f,
+                table.Width * 0.385f,
+            };
+
             // 利用百分比來分配每個欄位的寬度
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, table.Width * 0.1228f));
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, table.Width * 0.1228f));
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, table.Width * 0.1228f));
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, table.Width * 0.1228f));
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, table.Width * 0.1228f));
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, table.Width * 0.3056f));
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, table.Width * 0.0856f));
+            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, cellWidthOfRow[0]));
+            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, cellWidthOfRow[1]));
+            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, cellWidthOfRow[2]));
+            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, cellWidthOfRow[3]));
+            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, cellWidthOfRow[4]));
+            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, cellWidthOfRow[5]));
 
             // 創建標題列
             AddTitleBar();
@@ -215,7 +226,7 @@ namespace SpendTracker
             table.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
 
             // 創建按鈕並將按鈕添加到表格的第一列
-            for(int i = 0; i < 7; i++)
+            for(int i = 0; i < 6; i++)
             {
                 titleBar.Add(new Button
                 {
@@ -229,13 +240,12 @@ namespace SpendTracker
             }
 
             // 令各按鈕的寬度等於各欄位的寬度
-            titleBar[0].Width = (int)(table.Width * 0.1228);
-            titleBar[1].Width = (int)(table.Width * 0.1228);
-            titleBar[2].Width = (int)(table.Width * 0.1228);
-            titleBar[3].Width = (int)(table.Width * 0.1228);
-            titleBar[4].Width = (int)(table.Width * 0.1228);
-            titleBar[5].Width = (int)(table.Width * 0.3056);
-            titleBar[6].Width = (int)(table.Width * 0.0856);
+            titleBar[0].Width = (int)(cellWidthOfRow[0]);
+            titleBar[1].Width = (int)(cellWidthOfRow[1]);
+            titleBar[2].Width = (int)(cellWidthOfRow[2]);
+            titleBar[3].Width = (int)(cellWidthOfRow[3]);
+            titleBar[4].Width = (int)(cellWidthOfRow[4]);
+            titleBar[5].Width = (int)(cellWidthOfRow[5]);
 
             // 設置各按鈕的文字內容
             titleBar[0].Text = "日期";
@@ -244,12 +254,11 @@ namespace SpendTracker
             titleBar[3].Text = "學雜費";
             titleBar[4].Text = "總花費";
             titleBar[5].Text = "備註";
-            titleBar[6].Text = "編輯";
         }
 
         private void AddDataRow()
         {
-            // 創建 17 列，每列有 7 個 cell
+            // 創建 17 列，每列有 6 個 cell
             for (int index = 0; index < 17; index++)
             {
                 // 動態新增一行
@@ -261,7 +270,7 @@ namespace SpendTracker
 
                 // 建立這一列的 cell 並添加到表格
                 rowList.Add(new List<TextBox>());
-                for (int i = 0; i < 7; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     rowList.Last().Add(new TextBox
                     {
@@ -277,13 +286,12 @@ namespace SpendTracker
                 }
 
                 // 令各個 cell 的寬度等於各欄位的寬度
-                rowList.Last()[0].Width = (int)(table.Width * 0.1228);
-                rowList.Last()[1].Width = (int)(table.Width * 0.1228);
-                rowList.Last()[2].Width = (int)(table.Width * 0.1228);
-                rowList.Last()[3].Width = (int)(table.Width * 0.1228);
-                rowList.Last()[4].Width = (int)(table.Width * 0.1228);
-                rowList.Last()[5].Width = (int)(table.Width * 0.3056);
-                rowList.Last()[6].Width = (int)(table.Width * 0.0856);
+                rowList.Last()[0].Width = (int)(cellWidthOfRow[0]);
+                rowList.Last()[1].Width = (int)(cellWidthOfRow[1]);
+                rowList.Last()[2].Width = (int)(cellWidthOfRow[2]);
+                rowList.Last()[3].Width = (int)(cellWidthOfRow[3]);
+                rowList.Last()[4].Width = (int)(cellWidthOfRow[4]);
+                rowList.Last()[5].Width = (int)(cellWidthOfRow[5]);
             }
         }
 
@@ -429,7 +437,6 @@ namespace SpendTracker
                     rowList[i][3].Text = dailySpends[index].Other.ToString();
                     rowList[i][4].Text = dailySpends[index].TotalAmount.ToString();
                     rowList[i][5].Text = dailySpends[index].Remarks;
-                    rowList[i][6].Text = "編輯";
                     index++;
                 }
 
@@ -442,7 +449,6 @@ namespace SpendTracker
                     rowList[i][3].Text = "------";
                     rowList[i][4].Text = "------";
                     rowList[i][5].Text = "------";
-                    rowList[i][6].Text = "----";
                 }
 
                 // 將花費加總寫入該頁的最後一列
@@ -452,7 +458,6 @@ namespace SpendTracker
                 rowList[^1][3].Text = totalSpend.Other.ToString(); ;
                 rowList[^1][4].Text = totalSpend.TotalAmount.ToString(); ;
                 rowList[^1][5].Text = totalSpend.Remarks;
-                rowList[^1][6].Text = "----";
             }
             catch (Exception)
             {
