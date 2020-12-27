@@ -19,6 +19,7 @@ namespace SpendTracker
         DailySpend totalSpend = new DailySpend();
         List<List<TextBox>> rowList = new List<List<TextBox>>();
         int currentPage = 1;
+        int IntervalOfTopTool = 20;
 
         // 紀錄當前載入的是何年何月的資料，預設為現年現月
         int currentYear = DateTime.Now.Year;
@@ -34,6 +35,9 @@ namespace SpendTracker
             int RelativeWidth = (int)(Convert.ToInt32(DesktopWidthStr) * 0.8);
             int RelativeHeight = (int)(Convert.ToInt32(DesktopHeightStr) * 0.84);
             Size = new Size(RelativeWidth, RelativeHeight);
+
+            // 調整最上方工具列的UI間距
+            IntervalOfTopTool = (int)(Size.Width * 0.02);
 
             // 令主視窗居中顯示
             int x = (SystemInformation.WorkingArea.Width - Size.Width) / 2;
@@ -56,15 +60,17 @@ namespace SpendTracker
             // 設置相對位置
             int x = (int)(Size.Width * 0.495) - (SelectorOfYear.Width) / 2;
             int y = (int)(Size.Height * 0.03);
-            SelectorOfYear.Location = (Point)new Size(x - (int)(Width * 0.16), y);
+            SelectorOfYear.Location = (Point)new Size(x - (int)(Width * 0.23), y);
 
             // 預設內容為現在的年份
             SelectorOfYear.Text = DateTime.Now.ToString("yyyy年");
 
-            // 只能選擇最近三年的年份，想查詢更舊的年分必須手動輸入
+            // 只能選擇最近五年的年份，想查詢更舊的年分必須手動輸入
             SelectorOfYear.Items.Add(currentYear.ToString() + "年");
             SelectorOfYear.Items.Add((currentYear - 1).ToString() + "年");
             SelectorOfYear.Items.Add((currentYear - 2).ToString() + "年");
+            SelectorOfYear.Items.Add((currentYear - 3).ToString() + "年");
+            SelectorOfYear.Items.Add((currentYear - 4).ToString() + "年");
         }
 
         public void ArrangeSelectorOfMonth()
@@ -72,10 +78,10 @@ namespace SpendTracker
             // 設置大小
             SelectorOfMonth.Size = new Size((int)(Size.Width * 0.06), SelectorOfYear.Height);
 
-            // 設置相對位置
-            int x = (int)(Size.Width * 0.495) - (SelectorOfYear.Width) / 2;
-            int y = (int)(Size.Height * 0.03);
-            SelectorOfMonth.Location = (Point)new Size(x - (int)(Width * 0.06), y);
+            // 設置相對位置(水平貼齊年分的選擇器，然後稍微往右移動)
+            int x = SelectorOfYear.Location.X + SelectorOfYear.Width + IntervalOfTopTool;
+            int y = SelectorOfYear.Location.Y;
+            SelectorOfMonth.Location = (Point)new Size(x, y);
 
             // 預設內容為現在的月份
             SelectorOfMonth.Text = DateTime.Now.ToString("MM月");
@@ -92,30 +98,55 @@ namespace SpendTracker
             // 設置大小
             SubmitButton.Size = new Size((int)(Size.Width * 0.08), SelectorOfYear.Height);
 
-            // 設置相對位置
-            int x = (int)(Size.Width * 0.495) - (SelectorOfYear.Width) / 2;
-            int y = (int)(Size.Height * 0.03);
-            SubmitButton.Location = (Point)new Size(x + (int)(Width * 0.02), y);
+            // 設置相對位置(水平貼齊月分的選擇器，然後稍微往右移動)
+            int x = SelectorOfMonth.Location.X + SelectorOfMonth.Width + IntervalOfTopTool;
+            int y = SelectorOfMonth.Location.Y;
+            SubmitButton.Location = (Point)new Size(x, y);
 
             // 預設內容
             SubmitButton.Text = "送出查詢";
         }
 
-        public void ArrangePageButton()
+        public void ArrangGoBackButton()
         {
             // 設置大小
-            GoBackButton.Size = new Size((int)(Size.Width * 0.08), SelectorOfYear.Height);
-            GoNextButton.Size = new Size((int)(Size.Width * 0.08), SelectorOfYear.Height);
+            GoBackButton.Size = new Size(SubmitButton.Size.Width, SelectorOfYear.Height);
 
-            // 設置相對位置
-            int x = (int)(Size.Width * 0.495) - (SelectorOfYear.Width) / 2;
-            int y = (int)(Size.Height * 0.03);
-            GoBackButton.Location = (Point)new Size(x + (int)(Width * 0.117), y);
-            GoNextButton.Location = (Point)new Size(x + (int)(Width * 0.214), y);
+            // 設置相對位置(水平貼齊送出按鈕，然後稍微往右移動)
+            int x = SubmitButton.Location.X + SubmitButton.Width + IntervalOfTopTool;
+            int y = SubmitButton.Location.Y;
+            GoBackButton.Location = (Point)new Size(x, y);
 
             // 設置文字內容
             GoBackButton.Text = "前半月";
+        }
+
+        public void ArrangGoNextButton()
+        {
+            // 設置大小
+            GoNextButton.Size = new Size(SubmitButton.Size.Width, SelectorOfYear.Height);
+
+            // 設置相對位置(水平貼齊前半月的按鈕，然後稍微往右移動)
+            int x = GoBackButton.Location.X + GoBackButton.Width + IntervalOfTopTool;
+            int y = GoBackButton.Location.Y;
+            GoNextButton.Location = (Point)new Size(x, y);
+
+            // 設置文字內容
             GoNextButton.Text = "後半月";
+        }
+
+        public void ArrangeSaveButton()
+        {
+            // 設置大小
+            SaveButton.Size = new Size(SubmitButton.Size.Width, SelectorOfYear.Height);
+
+            // 設置相對位置(水平貼齊後半月的按鈕，然後稍微往右移動)
+            int x = GoNextButton.Location.X + GoNextButton.Width + IntervalOfTopTool;
+            int y = GoNextButton.Location.Y;
+            SaveButton.Location = (Point)new Size(x, y);
+
+            // 設置文字內容
+            SaveButton.Text = "儲存變更";
         }
 
         public void ArrangeContainerOfTable()
@@ -166,9 +197,11 @@ namespace SpendTracker
             ArrangeSelectorOfYear();
             ArrangeSelectorOfMonth();
             ArrangeSubmitButton();
+            ArrangGoBackButton();
+            ArrangGoNextButton();
+            ArrangeSaveButton();
             ArrangeContainerOfTable();
             ArrangeTable();
-            ArrangePageButton();
             ReadDataToList(currentYear, currentMonth);
             WriteDataToTable(DateTime.Now.Day < 17 ? 1 : 2); // 若現在的日期為後半月，則直接呈現後半月的資料
         }

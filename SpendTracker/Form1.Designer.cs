@@ -36,6 +36,7 @@ namespace SpendTracker
             this.GoNextButton = new System.Windows.Forms.Button();
             this.SelectorOfMonth = new System.Windows.Forms.ComboBox();
             this.SubmitButton = new System.Windows.Forms.Button();
+            this.SaveButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // SelectorOfYear
@@ -55,7 +56,7 @@ namespace SpendTracker
             // 
             // GoBackButton
             // 
-            this.GoBackButton.Location = new System.Drawing.Point(484, 305);
+            this.GoBackButton.Location = new System.Drawing.Point(552, 97);
             this.GoBackButton.Margin = new System.Windows.Forms.Padding(5);
             this.GoBackButton.Name = "GoBackButton";
             this.GoBackButton.Size = new System.Drawing.Size(118, 35);
@@ -66,7 +67,7 @@ namespace SpendTracker
             // 
             // GoNextButton
             // 
-            this.GoNextButton.Location = new System.Drawing.Point(644, 305);
+            this.GoNextButton.Location = new System.Drawing.Point(552, 157);
             this.GoNextButton.Margin = new System.Windows.Forms.Padding(5);
             this.GoNextButton.Name = "GoNextButton";
             this.GoNextButton.Size = new System.Drawing.Size(118, 35);
@@ -95,11 +96,21 @@ namespace SpendTracker
             this.SubmitButton.UseVisualStyleBackColor = true;
             this.SubmitButton.Click += new System.EventHandler(this.SubmitButton_Click);
             // 
+            // SaveButton
+            // 
+            this.SaveButton.Location = new System.Drawing.Point(552, 213);
+            this.SaveButton.Name = "SaveButton";
+            this.SaveButton.Size = new System.Drawing.Size(112, 34);
+            this.SaveButton.TabIndex = 6;
+            this.SaveButton.Text = "button1";
+            this.SaveButton.UseVisualStyleBackColor = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 449);
+            this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.SubmitButton);
             this.Controls.Add(this.SelectorOfMonth);
             this.Controls.Add(this.GoNextButton);
@@ -121,6 +132,7 @@ namespace SpendTracker
         private System.Windows.Forms.Button GoNextButton;
         private System.Windows.Forms.ComboBox SelectorOfMonth;
         private System.Windows.Forms.Button SubmitButton;
+        private System.Windows.Forms.Button SaveButton;
     }
 }
 
