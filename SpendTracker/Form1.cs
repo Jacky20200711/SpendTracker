@@ -154,9 +154,9 @@ namespace SpendTracker
             // 設置相對大小
             ContainerOfTable.Size = new Size((int)(Size.Width * 0.9), (int)(Size.Height * 0.78));
 
-            // 設置相對位置
+            // 設置相對位置(x接近置中 & 令y和上方工具列的間距 = 上方工具列到視窗頂部的間距)
             int x = (int)(Size.Width * 0.495) - (ContainerOfTable.Width) / 2;
-            int y = (int)(Size.Height * 0.089);
+            int y = SelectorOfYear.Location.Y + SelectorOfYear.Height + SelectorOfYear.Location.Y;
             ContainerOfTable.Location = (Point)new Size(x, y);
         }
 
