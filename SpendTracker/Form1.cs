@@ -20,6 +20,7 @@ namespace SpendTracker
         List<List<TextBox>> rowList = new List<List<TextBox>>();
         int currentPage = 1;
         int IntervalOfTopTool = 20;
+        int fontSize = 12;
         float[] cellWidthOfRow;
 
         // 紀錄當前載入的是何年何月的資料，預設為現年現月
@@ -39,6 +40,12 @@ namespace SpendTracker
 
             // 調整最上方工具列的UI間距
             IntervalOfTopTool = (int)(Size.Width * 0.02);
+
+            // 根據螢幕解析度調整字體
+            if(SystemInformation.PrimaryMonitorSize.Width == 1920)
+            {
+                fontSize = 18;
+            }
 
             // 令主視窗居中顯示
             int x = (SystemInformation.WorkingArea.Width - Size.Width) / 2;
@@ -230,7 +237,7 @@ namespace SpendTracker
                 titleBar.Add(new Button
                 {
                     Height = cellHeight,
-                    Font = new Font("Microsoft JhengHei", 12, FontStyle.Regular, GraphicsUnit.Pixel),
+                    Font = new Font("Microsoft JhengHei", fontSize, FontStyle.Regular, GraphicsUnit.Pixel),
                     TextAlign = ContentAlignment.MiddleCenter
                 });
 
@@ -311,7 +318,7 @@ namespace SpendTracker
                     // 使用 Pixel 可以固定字型大小，比較不容易在別的解析度跑版
                     rowList.Last().Add(new TextBox
                     {
-                        Font = new Font("Microsoft JhengHei", 12, FontStyle.Regular, GraphicsUnit.Pixel),
+                        Font = new Font("Microsoft JhengHei", fontSize, FontStyle.Regular, GraphicsUnit.Pixel),
                     });
 
                     // 添加到對應的cell
