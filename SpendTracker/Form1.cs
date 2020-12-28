@@ -153,7 +153,7 @@ namespace SpendTracker
         public void ArrangeContainerOfTable()
         {
             // 設置相對大小
-            ContainerOfTable.Size = new Size((int)(Size.Width * 0.9), (int)(Size.Height * 0.78));
+            ContainerOfTable.Size = new Size((int)(Size.Width * 0.9), (int)(Size.Height * 0.8));
 
             // 設置相對位置(x接近置中 & 令y和上方工具列的間距 = 上方工具列到視窗頂部的間距)
             int x = (int)(Size.Width * 0.495) - (ContainerOfTable.Width) / 2;
@@ -194,9 +194,6 @@ namespace SpendTracker
 
             // 令表格和容器的高度相同
             table.Height = ContainerOfTable.Height;
-
-            // 設置 cell 的邊框
-            table.CellBorderStyle = TableLayoutPanelCellBorderStyle.OutsetPartial;
         }
 
         // 主視窗的建構子，程序開始時會調用這個函數
@@ -223,14 +220,15 @@ namespace SpendTracker
             table.RowCount++;
 
             // 設定行高
-            table.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
+            int cellHeight = 36;
+            table.RowStyles.Add(new RowStyle(SizeType.Absolute, cellHeight));
 
             // 創建按鈕並將按鈕添加到表格的第一列
             for(int i = 0; i < 6; i++)
             {
                 titleBar.Add(new Button
                 {
-                    Height = 40,
+                    Height = cellHeight,
                     Font = new Font("Microsoft JhengHei", 10, FontStyle.Regular),
                     TextAlign = ContentAlignment.MiddleCenter
                 });
@@ -265,7 +263,7 @@ namespace SpendTracker
                 table.RowCount++;
 
                 // 設定行高
-                int cellHeight = 36;
+                int cellHeight = (int)((ContainerOfTable.Height - titleBar[0].Height) / 17);
                 table.RowStyles.Add(new RowStyle(SizeType.Absolute, cellHeight));
 
                 // 建立這一列的 cell 並添加到表格
