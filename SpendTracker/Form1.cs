@@ -34,7 +34,7 @@ namespace SpendTracker
 
             // 調整主視窗的大小
             int RelativeWidth = (int)(Convert.ToInt32(DesktopWidthStr) * 0.8);
-            int RelativeHeight = (int)(Convert.ToInt32(DesktopHeightStr) * 0.84);
+            int RelativeHeight = (int)(Convert.ToInt32(DesktopHeightStr) * 0.8);
             Size = new Size(RelativeWidth, RelativeHeight);
 
             // 調整最上方工具列的UI間距
@@ -153,11 +153,11 @@ namespace SpendTracker
         public void ArrangeContainerOfTable()
         {
             // 設置相對大小
-            ContainerOfTable.Size = new Size((int)(Size.Width * 0.9), (int)(Size.Height * 0.8));
+            ContainerOfTable.Size = new Size((int)(Size.Width * 0.9), (int)(Size.Height * 0.81));
 
-            // 設置相對位置(x接近置中 & 令y和上方工具列的間距 = 上方工具列到視窗頂部的間距)
+            // 設置相對位置(x接近置中 & 令表格和上方工具列的間距近似於上方工具列到視窗頂部的間距)
             int x = (int)(Size.Width * 0.495) - (ContainerOfTable.Width) / 2;
-            int y = SelectorOfYear.Location.Y + SelectorOfYear.Height + SelectorOfYear.Location.Y;
+            int y = SelectorOfYear.Location.Y + SubmitButton.Height + SelectorOfYear.Location.Y - 6;
             ContainerOfTable.Location = (Point)new Size(x, y);
         }
 
