@@ -252,6 +252,43 @@ namespace SpendTracker
             titleBar[3].Text = "學雜費";
             titleBar[4].Text = "總花費";
             titleBar[5].Text = "備註";
+
+            // 綁定按鈕的點擊事件
+            titleBar[0].Click += delegate { SortData("Date"); };
+            titleBar[1].Click += delegate { SortData("Food"); };
+            titleBar[2].Click += delegate { SortData("Transportation"); };
+            titleBar[3].Click += delegate { SortData("Other"); };
+            titleBar[4].Click += delegate { SortData("TotalAmount"); };
+        }
+
+        public void SortData(string order)
+        {
+            // 按照傳入的參數來決定如何排序資料
+            switch (order)
+            {
+                case "Date":
+                    dailySpends = dailySpends.OrderBy(d => d.Date).ToList();
+                    break;
+
+                case "Food":
+                    dailySpends = dailySpends.OrderByDescending(d => d.Food).ToList();
+                    break;
+
+                case "Transportation":
+                    dailySpends = dailySpends.OrderByDescending(d => d.Transportation).ToList();
+                    break;
+
+                case "Other":
+                    dailySpends = dailySpends.OrderByDescending(d => d.Other).ToList();
+                    break;
+
+                case "TotalAmount":
+                    dailySpends = dailySpends.OrderByDescending(d => d.TotalAmount).ToList();
+                    break;
+            }
+
+            // 將排序後的資料寫入表格 & 預設呈現到第一頁
+            WriteDataToTable(1);
         }
 
         private void AddDataRow()
