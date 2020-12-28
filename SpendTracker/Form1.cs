@@ -226,10 +226,11 @@ namespace SpendTracker
             // 創建按鈕並將按鈕添加到表格的第一列
             for(int i = 0; i < 6; i++)
             {
+                // 使用 Pixel 可以固定字型大小，比較不容易在別的解析度跑版
                 titleBar.Add(new Button
                 {
                     Height = cellHeight,
-                    Font = new Font("Microsoft JhengHei", 10, FontStyle.Regular),
+                    Font = new Font("Microsoft JhengHei", 12, FontStyle.Regular, GraphicsUnit.Pixel),
                     TextAlign = ContentAlignment.MiddleCenter
                 });
 
@@ -307,9 +308,10 @@ namespace SpendTracker
                 rowList.Add(new List<TextBox>());
                 for (int i = 0; i < 6; i++)
                 {
+                    // 使用 Pixel 可以固定字型大小，比較不容易在別的解析度跑版
                     rowList.Last().Add(new TextBox
                     {
-                        Font = new Font("Microsoft JhengHei", 10, FontStyle.Regular),
+                        Font = new Font("Microsoft JhengHei", 12, FontStyle.Regular, GraphicsUnit.Pixel),
                     });
 
                     // 添加到對應的cell
