@@ -329,6 +329,9 @@ namespace SpendTracker
                 rowList.Last()[3].Width = (int)(cellWidthOfRow[3]);
                 rowList.Last()[4].Width = (int)(cellWidthOfRow[4]);
                 rowList.Last()[5].Width = (int)(cellWidthOfRow[5]);
+
+                // 禁止編輯日期欄位
+                rowList.Last()[0].ReadOnly = true;
             }
         }
 
@@ -480,12 +483,12 @@ namespace SpendTracker
                 // 清空多餘的日期資料
                 for (int i = end; i < rowList.Count - 1; i++)
                 {
-                    rowList[i][0].Text = "------";
-                    rowList[i][1].Text = "------";
-                    rowList[i][2].Text = "------";
-                    rowList[i][3].Text = "------";
-                    rowList[i][4].Text = "------";
-                    rowList[i][5].Text = "------";
+                    rowList[i][0].Text = "--------------------";
+                    rowList[i][1].Text = "--------------------";
+                    rowList[i][2].Text = "--------------------";
+                    rowList[i][3].Text = "--------------------";
+                    rowList[i][4].Text = "--------------------";
+                    rowList[i][5].Text = "--------------------------------------------------------------------------";
                 }
 
                 // 將花費加總寫入該頁的最後一列
