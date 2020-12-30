@@ -43,7 +43,7 @@ namespace SpendTracker
             // 
             this.SelectorOfYear.FormattingEnabled = true;
             this.SelectorOfYear.Location = new System.Drawing.Point(28, 23);
-            this.SelectorOfYear.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.SelectorOfYear.Margin = new System.Windows.Forms.Padding(2);
             this.SelectorOfYear.Name = "SelectorOfYear";
             this.SelectorOfYear.Size = new System.Drawing.Size(117, 23);
             this.SelectorOfYear.TabIndex = 0;
@@ -51,7 +51,7 @@ namespace SpendTracker
             // ContainerOfTable
             // 
             this.ContainerOfTable.Location = new System.Drawing.Point(28, 63);
-            this.ContainerOfTable.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ContainerOfTable.Margin = new System.Windows.Forms.Padding(2);
             this.ContainerOfTable.Name = "ContainerOfTable";
             this.ContainerOfTable.Size = new System.Drawing.Size(191, 98);
             this.ContainerOfTable.TabIndex = 1;
@@ -97,12 +97,13 @@ namespace SpendTracker
             // SaveButton
             // 
             this.SaveButton.Location = new System.Drawing.Point(351, 139);
-            this.SaveButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.SaveButton.Margin = new System.Windows.Forms.Padding(2);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(71, 22);
             this.SaveButton.TabIndex = 6;
             this.SaveButton.Text = "button1";
             this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // MainWindow
             // 
@@ -117,7 +118,7 @@ namespace SpendTracker
             this.Controls.Add(this.ContainerOfTable);
             this.Controls.Add(this.SelectorOfYear);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainWindow";
             this.Text = "SpendTracker";
             this.ResumeLayout(false);

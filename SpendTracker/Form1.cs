@@ -342,7 +342,7 @@ namespace SpendTracker
             }
         }
 
-        public int GetDayOfTargetMonth(int year, int month)
+        public int GetNumOfDay(int year, int month)
         {
             // 透過月份取得天數
             int[] dayOfMonth = new int[] { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -371,7 +371,7 @@ namespace SpendTracker
                 dailySpends.Clear();
 
                 // 取得該年該月份的天數
-                int numOfDay = GetDayOfTargetMonth(year, month);
+                int numOfDay = GetNumOfDay(year, month);
 
                 // 進入該年的資料夾(若不存在則創建)
                 string TargetDir = year.ToString();
@@ -538,9 +538,48 @@ namespace SpendTracker
             }
         }
 
+        private bool IsAllFieldValid()
+        {
+            // 取得要檢查的資料筆數
+            int numOfData = currentPage == 1 ? 16 : dailySpends.Count - 16;
+
+            for (int i = 0; i < numOfData; i++)
+            {
+                // 檢查各項花費
+                for (int j = 1; j < rowList[i].Count - 1; j++)
+                {
+                    if (!int.TryParse(rowList[i][j].Text, out _))
+                    {
+                        MessageBox.Show($"儲存失敗，請檢查 {rowList[i][0].Text} 各項花費的格式!");
+                        return false;
+                    }
+                }
+            }
+
+            // 檢查備註長度
+            for (int i = 0; i < numOfData; i++)
+            {
+                if (rowList[i][^1].Text.Length > 30)
+                {
+                    MessageBox.Show($"儲存失敗，請檢查 {rowList[i][0].Text} 的備註長度(限30字)");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         private void SubmitButton_Click(object sender, EventArgs e)
         {
             // _ = (string)comboBox1.SelectedItem;
+        }
+
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            if (IsAllFieldValid())
+            {
+
+            }
         }
     }
 }
