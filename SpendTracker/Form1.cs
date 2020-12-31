@@ -342,8 +342,11 @@ namespace SpendTracker
                 rowList.Last()[4].Width = (int)(cellWidthOfRow[4]);
                 rowList.Last()[5].Width = (int)(cellWidthOfRow[5]);
 
-                // 禁止編輯日期欄位
+                // 禁止編輯日期欄位 
                 rowList.Last()[0].ReadOnly = true;
+
+                // 禁止編輯總花費欄位 
+                rowList.Last()[4].ReadOnly = true;
             }
         }
 
@@ -584,7 +587,7 @@ namespace SpendTracker
                     dailySpends[NewDataStart].Food = Convert.ToInt32(rowList[i][1].Text);
                     dailySpends[NewDataStart].Transportation = Convert.ToInt32(rowList[i][2].Text);
                     dailySpends[NewDataStart].Other = Convert.ToInt32(rowList[i][3].Text);
-                    dailySpends[NewDataStart].TotalAmount = Convert.ToInt32(rowList[i][4].Text);
+                    dailySpends[NewDataStart].TotalAmount = dailySpends[NewDataStart].Food + dailySpends[NewDataStart].Transportation + dailySpends[NewDataStart].Other;
                     dailySpends[NewDataStart].Remarks = rowList[i][5].Text;
                 }
 
@@ -599,7 +602,7 @@ namespace SpendTracker
                 // 將更新過並依照日期排序的月份資料，寫入到對應的檔案
                 for (int i = 0; i < NewData.Count; i++)
                 {
-                    file.WriteLine(@$"{NewData[i].Date},{NewData[i].Food},{NewData[i].Transportation},{NewData[i].Other},{NewData[i].Transportation},{NewData[i].Remarks}");
+                    file.WriteLine($"{NewData[i].Date},{NewData[i].Food},{NewData[i].Transportation},{NewData[i].Other},{NewData[i].TotalAmount},{NewData[i].Remarks}");
                 }
 
                 // 關閉檔案
