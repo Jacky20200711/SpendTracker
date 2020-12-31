@@ -348,6 +348,9 @@ namespace SpendTracker
                 // 禁止編輯總花費欄位 
                 rowList.Last()[4].ReadOnly = true;
             }
+
+            // 禁止編輯最後一列(用來顯示總花費)的備註
+            rowList.Last().Last().ReadOnly = true;
         }
 
         public int GetNumOfDay(int year, int month)
@@ -484,7 +487,7 @@ namespace SpendTracker
                     index++;
                 }
 
-                // 清空多餘的日期資料
+                // 標記多餘的日期資料
                 for (int i = end; i < rowList.Count - 1; i++)
                 {
                     rowList[i][0].Text = "--------------------";
@@ -493,6 +496,14 @@ namespace SpendTracker
                     rowList[i][3].Text = "--------------------";
                     rowList[i][4].Text = "--------------------";
                     rowList[i][5].Text = "--------------------------------------------------------------------------";
+
+                    // 禁止編輯多餘的欄位
+                    rowList[i][0].ReadOnly = true;
+                    rowList[i][1].ReadOnly = true;
+                    rowList[i][2].ReadOnly = true;
+                    rowList[i][3].ReadOnly = true;
+                    rowList[i][4].ReadOnly = true;
+                    rowList[i][5].ReadOnly = true;
                 }
 
                 // 將花費加總寫入該頁的最後一列
@@ -543,8 +554,9 @@ namespace SpendTracker
 
             for (int i = 0; i < numOfData; i++)
             {
-                // 檢查各項花費
-                for (int j = 1; j < rowList[i].Count - 1; j++)
+                // 檢查可以編輯的花費
+                int EditableSpend = 3;
+                for (int j = 1; j <= EditableSpend; j++)
                 {
                     if (!int.TryParse(rowList[i][j].Text, out _))
                     {
