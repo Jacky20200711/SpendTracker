@@ -13,14 +13,19 @@ namespace SpendTracker
 {
     public partial class MainWindow : Form
     {
+        // 用來儲存當前呈現的月份資料，這個變數可以視為使用者和表格資料之間的API
+        // 使用者點選排序後會先排序這個變數，再從這個變數讀取資料到表格
+        // 使用者切換頁面時，也是從這個變數讀取對應的資料到表格
+        List<DailySpend> dailySpends = new List<DailySpend>();   
+
         TableLayoutPanel table = new TableLayoutPanel();
         List<Button> titleBar = new List<Button>();
-        List<DailySpend> dailySpends = new List<DailySpend>();
         DailySpend totalSpend = new DailySpend();
         List<List<TextBox>> rowList = new List<List<TextBox>>();
         int currentPage = 1;
         int IntervalOfTopTool = 20;
         int fontSize = 12;
+        string projectDir = Directory.GetCurrentDirectory();
         float[] cellWidthOfRow;
 
         // 紀錄當前載入的是何年何月的資料，預設為現年現月
@@ -374,18 +379,16 @@ namespace SpendTracker
                 int numOfDay = GetNumOfDay(year, month);
 
                 // 進入該年的資料夾(若不存在則創建)
-                string TargetDir = year.ToString();
+                string TargetDir = @$"{projectDir}\{year}";
 
                 if (!Directory.Exists(TargetDir))
                 {
                     Directory.CreateDirectory(TargetDir);
                 }
 
-                Directory.SetCurrentDirectory(TargetDir);
-
                 // 開啟該月的檔案(若不存在則創建)
                 string monthStr = month.ToString("D2");
-                string targetFile = $"{year}-{monthStr}.txt";
+                string targetFile = @$"{TargetDir}\{year}-{monthStr}.txt";
                 StreamWriter fileForWrite;
 
                 if (!File.Exists(targetFile))
@@ -407,10 +410,6 @@ namespace SpendTracker
                 // 讀取檔案內容(逐行讀取)
                 StreamReader fileForRead = new StreamReader(targetFile);
                 string line;
-                int Food = 0;
-                int Transportation = 0;
-                int Other = 0;
-                int TotalAmount = 0;
 
                 while ((line = fileForRead.ReadLine()) != null)
                 {
@@ -434,22 +433,16 @@ namespace SpendTracker
                         TotalAmount = Convert.ToInt32(dataOfDay[4]),
                         Remarks = remark
                     });
-
-                    // 累計各項花費
-                    Food += dailySpends.Last().Food;
-                    Transportation += dailySpends.Last().Transportation;
-                    Other += dailySpends.Last().Other;
-                    TotalAmount += dailySpends.Last().TotalAmount;
                 }
 
                 fileForRead.Close();
 
                 // 紀錄各項花費的加總
                 totalSpend.Date = dailySpends[0].Date.Substring(0, 7);
-                totalSpend.Food = Food;
-                totalSpend.Transportation = Transportation;
-                totalSpend.Other = Other;
-                totalSpend.TotalAmount = TotalAmount;
+                totalSpend.Food = dailySpends.Sum(d => d.Food);
+                totalSpend.Transportation = dailySpends.Sum(d => d.Transportation);
+                totalSpend.Other = dailySpends.Sum(d => d.Other);
+                totalSpend.TotalAmount = dailySpends.Sum(d => d.TotalAmount);
                 totalSpend.Remarks = "各項花費的加總";
             }
             catch (Exception)
@@ -458,6 +451,7 @@ namespace SpendTracker
                 string targetFile = $"{currentYear}-{monthStr}.txt";
                 string ErrorMessage = $"讀取失敗，請到資料夾{currentYear}下查看{targetFile}的資料是否異常!";
                 MessageBox.Show(ErrorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
             }
         }
 
@@ -512,6 +506,7 @@ namespace SpendTracker
                 string targetFile = $"{currentYear}-{monthStr}.txt";
                 string ErrorMessage = $"讀取失敗，請到資料夾{currentYear}下查看{targetFile}的資料是否異常!";
                 MessageBox.Show(ErrorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
             }
         }
 
@@ -578,7 +573,46 @@ namespace SpendTracker
         {
             if (IsAllFieldValid())
             {
+                // 讀取當前分頁的表格資料
+                int numOfData = currentPage == 1 ? 16 : dailySpends.Count - 16;
+                int NewDataStart = currentPage == 1 ? 0 : 16;
 
+                for (int i = 0; i < numOfData; i++, NewDataStart++)
+                {
+                    // 更新串列中，對應各日期欄位的資料
+                    dailySpends[NewDataStart].Date = rowList[i][0].Text;
+                    dailySpends[NewDataStart].Food = Convert.ToInt32(rowList[i][1].Text);
+                    dailySpends[NewDataStart].Transportation = Convert.ToInt32(rowList[i][2].Text);
+                    dailySpends[NewDataStart].Other = Convert.ToInt32(rowList[i][3].Text);
+                    dailySpends[NewDataStart].TotalAmount = Convert.ToInt32(rowList[i][4].Text);
+                    dailySpends[NewDataStart].Remarks = rowList[i][5].Text;
+                }
+
+                // 複製該串列 & 使用日期排序
+                List<DailySpend> NewData = dailySpends.OrderBy(d => d.Date).ToList();
+
+                // 開啟檔案
+                string monthStr = currentMonth.ToString("D2");
+                string targetFile = @$"{projectDir}\{currentYear}\{currentYear}-{currentMonth}.txt";
+                StreamWriter file = new StreamWriter(targetFile);
+
+                // 將更新過並依照日期排序的月份資料，寫入到對應的檔案
+                for (int i = 0; i < NewData.Count; i++)
+                {
+                    file.WriteLine(@$"{NewData[i].Date},{NewData[i].Food},{NewData[i].Transportation},{NewData[i].Other},{NewData[i].Transportation},{NewData[i].Remarks}");
+                }
+
+                // 關閉檔案
+                file.Close();
+
+                // 重新計算各項花費的加總
+                totalSpend.Food = dailySpends.Sum(d => d.Food);
+                totalSpend.Transportation = dailySpends.Sum(d => d.Transportation);
+                totalSpend.Other = dailySpends.Sum(d => d.Other);
+                totalSpend.TotalAmount = dailySpends.Sum(d => d.TotalAmount);
+
+                // 將更新後的類別資料寫入表格
+                WriteDataToTable(currentPage);
             }
         }
     }
