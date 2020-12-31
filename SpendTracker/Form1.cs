@@ -558,10 +558,18 @@ namespace SpendTracker
                 int EditableSpend = 3;
                 for (int j = 1; j <= EditableSpend; j++)
                 {
-                    if (!int.TryParse(rowList[i][j].Text, out _))
+                    // 若欄位為空則補上0
+                    if(rowList[i][j].Text.Trim().Length == 0)
                     {
-                        MessageBox.Show($"儲存失敗，請檢查 {rowList[i][0].Text} 各項花費的格式!");
-                        return false;
+                        rowList[i][j].Text = "0";
+                    }
+                    else
+                    {
+                        if (!int.TryParse(rowList[i][j].Text, out _))
+                        {
+                            MessageBox.Show($"儲存失敗，請檢查 {rowList[i][0].Text} 各項花費的格式!");
+                            return false;
+                        }
                     }
                 }
             }
