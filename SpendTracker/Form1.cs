@@ -76,14 +76,14 @@ namespace SpendTracker
             SelectorOfYear.Location = (Point)new Size(x - (int)(Width * 0.23), y);
 
             // 預設內容為現在的年份
-            SelectorOfYear.Text = DateTime.Now.ToString("yyyy年");
+            SelectorOfYear.Text = DateTime.Now.ToString("yyyy");
 
             // 只能選擇最近五年的年份，想查詢更舊的年分必須手動輸入
-            SelectorOfYear.Items.Add(currentYear.ToString() + "年");
-            SelectorOfYear.Items.Add((currentYear - 1).ToString() + "年");
-            SelectorOfYear.Items.Add((currentYear - 2).ToString() + "年");
-            SelectorOfYear.Items.Add((currentYear - 3).ToString() + "年");
-            SelectorOfYear.Items.Add((currentYear - 4).ToString() + "年");
+            SelectorOfYear.Items.Add(currentYear.ToString());
+            SelectorOfYear.Items.Add((currentYear - 1).ToString());
+            SelectorOfYear.Items.Add((currentYear - 2).ToString());
+            SelectorOfYear.Items.Add((currentYear - 3).ToString());
+            SelectorOfYear.Items.Add((currentYear - 4).ToString());
         }
 
         public void ArrangeSelectorOfMonth()
@@ -97,12 +97,12 @@ namespace SpendTracker
             SelectorOfMonth.Location = (Point)new Size(x, y);
 
             // 預設內容為現在的月份
-            SelectorOfMonth.Text = DateTime.Now.ToString("MM月");
+            SelectorOfMonth.Text = DateTime.Now.ToString("MM");
 
             // 可以選擇1~12月
             for(int i = 12; i > 0; i--)
             {
-                SelectorOfMonth.Items.Add(i.ToString() + "月");
+                SelectorOfMonth.Items.Add(i.ToString());
             }
         }
 
