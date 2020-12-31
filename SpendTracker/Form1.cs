@@ -349,8 +349,13 @@ namespace SpendTracker
                 rowList.Last()[4].ReadOnly = true;
             }
 
-            // 禁止編輯最後一列(用來顯示總花費)的備註
-            rowList.Last().Last().ReadOnly = true;
+            // 禁止編輯最後一列(用來顯示總花費)
+            rowList.Last()[0].ReadOnly = true;
+            rowList.Last()[1].ReadOnly = true;
+            rowList.Last()[2].ReadOnly = true;
+            rowList.Last()[3].ReadOnly = true;
+            rowList.Last()[4].ReadOnly = true;
+            rowList.Last()[5].ReadOnly = true;
         }
 
         public int GetNumOfDay(int year, int month)
