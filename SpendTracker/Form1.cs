@@ -433,7 +433,7 @@ namespace SpendTracker
                         splitedRemarks.Add(dataOfDay[i]);
                     }
 
-                    string remark = string.Join("", splitedRemarks);
+                    string remark = string.Join(",", splitedRemarks);
 
                     dailySpends.Add(new DailySpend
                     {
