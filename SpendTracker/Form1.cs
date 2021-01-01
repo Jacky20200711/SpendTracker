@@ -552,7 +552,7 @@ namespace SpendTracker
             }
         }
 
-        private bool IsAllFieldValid()
+        private bool IsSpendFieldValid()
         {
             // 取得要檢查的資料筆數
             int numOfData = currentPage == 1 ? 16 : dailySpends.Count - 16;
@@ -592,14 +592,59 @@ namespace SpendTracker
             return true;
         }
 
+        private bool IsComboBoxValueValid()
+        {
+            // 取得 comboBox 的內容
+            string yearStr = SelectorOfYear.Text;
+            string monthStr = SelectorOfMonth.Text;
+
+            // 檢查輸入的年份
+            if (int.TryParse(yearStr, out _))
+            {
+                int year = int.Parse(yearStr);
+                if(year < 2015 || year > 9999)
+                {
+                    MessageBox.Show($"查詢失敗，輸入的年份必須是2015~9999");
+                    return false;
+                }
+            }
+            else
+            {
+                MessageBox.Show($"查詢失敗，輸入的年份必須是2015~9999");
+                return false;
+            }
+
+            // 檢查輸入的月份
+            if (int.TryParse(monthStr, out _))
+            {
+                int month = int.Parse(monthStr);
+                if (month < 1 || month > 12)
+                {
+                    MessageBox.Show($"查詢失敗，輸入的月份必須是1~12");
+                    return false;
+                }
+            }
+            else
+            {
+                MessageBox.Show($"查詢失敗，輸入的月份必須是1~12");
+                return false;
+            }
+
+            return true;
+        }
+
         private void SubmitButton_Click(object sender, EventArgs e)
         {
-            // _ = (string)comboBox1.SelectedItem;
+            if (IsComboBoxValueValid())
+            {
+                ReadDataToList(int.Parse(SelectorOfYear.Text), int.Parse(SelectorOfMonth.Text));
+                WriteDataToTable(1);
+            }
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            if (IsAllFieldValid())
+            if (IsSpendFieldValid())
             {
                 // 讀取當前分頁的表格資料
                 int numOfData = currentPage == 1 ? 16 : dailySpends.Count - 16;
