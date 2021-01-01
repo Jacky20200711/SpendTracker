@@ -666,7 +666,7 @@ namespace SpendTracker
 
                 // 開啟檔案
                 string monthStr = currentMonth.ToString("D2");
-                string targetFile = @$"{projectDir}\{currentYear}\{currentYear}-{currentMonth}.txt";
+                string targetFile = @$"{projectDir}\{currentYear}\{currentYear}-{monthStr}.txt";
                 StreamWriter file = new StreamWriter(targetFile);
 
                 // 將更新過並依照日期排序的月份資料，寫入到對應的檔案
