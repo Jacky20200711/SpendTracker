@@ -118,6 +118,18 @@ namespace SpendTracker
 
             // 預設內容
             SubmitButton.Text = "送出查詢";
+
+            // 設置樣式
+            SubmitButton.BackColor = Color.RoyalBlue;
+            SubmitButton.ForeColor = Color.White;
+            SubmitButton.FlatStyle = FlatStyle.Flat;
+            SubmitButton.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+            SubmitButton.TabStop = false;
+            SubmitButton.FlatAppearance.BorderSize = 0;
+
+            // 預設的焦點為年分的選擇器，若不修改則其內容會在程式開啟時被反白
+            // 將程式開啟後的焦點轉移到這個按鈕
+            SubmitButton.Select();
         }
 
         public void ArrangGoBackButton()
@@ -132,6 +144,14 @@ namespace SpendTracker
 
             // 設置文字內容
             GoBackButton.Text = "前半月";
+
+            // 設置樣式
+            GoBackButton.BackColor = Color.SeaGreen;
+            GoBackButton.ForeColor = Color.White;
+            GoBackButton.FlatStyle = FlatStyle.Flat;
+            GoBackButton.FlatAppearance.MouseOverBackColor = Color.SeaGreen;
+            GoBackButton.TabStop = false;
+            GoBackButton.FlatAppearance.BorderSize = 0;
         }
 
         public void ArrangGoNextButton()
@@ -146,6 +166,14 @@ namespace SpendTracker
 
             // 設置文字內容
             GoNextButton.Text = "後半月";
+
+            // 設置樣式
+            GoNextButton.BackColor = Color.SeaGreen;
+            GoNextButton.ForeColor = Color.White;
+            GoNextButton.FlatStyle = FlatStyle.Flat;
+            GoNextButton.FlatAppearance.MouseOverBackColor = Color.SeaGreen;
+            GoNextButton.TabStop = false;
+            GoNextButton.FlatAppearance.BorderSize = 0;
         }
 
         public void ArrangeSaveButton()
@@ -160,6 +188,14 @@ namespace SpendTracker
 
             // 設置文字內容
             SaveButton.Text = "儲存變更";
+
+            // 設置樣式
+            SaveButton.BackColor = Color.MediumOrchid;
+            SaveButton.ForeColor = Color.White;
+            SaveButton.FlatStyle = FlatStyle.Flat;
+            SaveButton.FlatAppearance.MouseOverBackColor = Color.MediumOrchid;
+            SaveButton.TabStop = false;
+            SaveButton.FlatAppearance.BorderSize = 0;
         }
 
         public void ArrangeContainerOfTable()
@@ -251,12 +287,10 @@ namespace SpendTracker
             }
 
             // 令各按鈕的寬度等於各欄位的寬度
-            titleBar[0].Width = (int)(cellWidthOfRow[0]);
-            titleBar[1].Width = (int)(cellWidthOfRow[1]);
-            titleBar[2].Width = (int)(cellWidthOfRow[2]);
-            titleBar[3].Width = (int)(cellWidthOfRow[3]);
-            titleBar[4].Width = (int)(cellWidthOfRow[4]);
-            titleBar[5].Width = (int)(cellWidthOfRow[5]);
+            for(int i = 0; i < titleBar.Count; i++)
+            {
+                titleBar[i].Width = (int)(cellWidthOfRow[i]);
+            }
 
             // 設置各按鈕的文字內容
             titleBar[0].Text = "日期";
@@ -272,6 +306,16 @@ namespace SpendTracker
             titleBar[2].Click += delegate { SortData("Transportation"); };
             titleBar[3].Click += delegate { SortData("Other"); };
             titleBar[4].Click += delegate { SortData("TotalAmount"); };
+
+            // 設置樣式
+            for (int i = 0; i < titleBar.Count; i++)
+            {
+                titleBar[i].BackColor = Color.Sienna;
+                titleBar[i].ForeColor = Color.White;
+                titleBar[i].FlatStyle = FlatStyle.Flat;
+                titleBar[i].FlatAppearance.BorderColor = Color.Sienna;
+                titleBar[i].FlatAppearance.MouseOverBackColor = Color.Sienna;
+            }
         }
 
         public void SortData(string order)

@@ -42,25 +42,24 @@ namespace SpendTracker
             // SelectorOfYear
             // 
             this.SelectorOfYear.FormattingEnabled = true;
-            this.SelectorOfYear.Location = new System.Drawing.Point(28, 23);
-            this.SelectorOfYear.Margin = new System.Windows.Forms.Padding(2);
+            this.SelectorOfYear.Location = new System.Drawing.Point(44, 35);
             this.SelectorOfYear.Name = "SelectorOfYear";
-            this.SelectorOfYear.Size = new System.Drawing.Size(117, 23);
+            this.SelectorOfYear.Size = new System.Drawing.Size(182, 31);
             this.SelectorOfYear.TabIndex = 0;
             // 
             // ContainerOfTable
             // 
-            this.ContainerOfTable.Location = new System.Drawing.Point(28, 63);
-            this.ContainerOfTable.Margin = new System.Windows.Forms.Padding(2);
+            this.ContainerOfTable.Location = new System.Drawing.Point(44, 97);
             this.ContainerOfTable.Name = "ContainerOfTable";
-            this.ContainerOfTable.Size = new System.Drawing.Size(191, 98);
+            this.ContainerOfTable.Size = new System.Drawing.Size(300, 150);
             this.ContainerOfTable.TabIndex = 1;
             // 
             // GoBackButton
             // 
-            this.GoBackButton.Location = new System.Drawing.Point(351, 63);
+            this.GoBackButton.Location = new System.Drawing.Point(552, 97);
+            this.GoBackButton.Margin = new System.Windows.Forms.Padding(5);
             this.GoBackButton.Name = "GoBackButton";
-            this.GoBackButton.Size = new System.Drawing.Size(75, 23);
+            this.GoBackButton.Size = new System.Drawing.Size(118, 35);
             this.GoBackButton.TabIndex = 2;
             this.GoBackButton.Text = "button1";
             this.GoBackButton.UseVisualStyleBackColor = true;
@@ -68,9 +67,10 @@ namespace SpendTracker
             // 
             // GoNextButton
             // 
-            this.GoNextButton.Location = new System.Drawing.Point(351, 102);
+            this.GoNextButton.Location = new System.Drawing.Point(552, 156);
+            this.GoNextButton.Margin = new System.Windows.Forms.Padding(5);
             this.GoNextButton.Name = "GoNextButton";
-            this.GoNextButton.Size = new System.Drawing.Size(75, 23);
+            this.GoNextButton.Size = new System.Drawing.Size(118, 35);
             this.GoNextButton.TabIndex = 3;
             this.GoNextButton.Text = "button2";
             this.GoNextButton.UseVisualStyleBackColor = true;
@@ -79,16 +79,18 @@ namespace SpendTracker
             // SelectorOfMonth
             // 
             this.SelectorOfMonth.FormattingEnabled = true;
-            this.SelectorOfMonth.Location = new System.Drawing.Point(169, 23);
+            this.SelectorOfMonth.Location = new System.Drawing.Point(266, 35);
+            this.SelectorOfMonth.Margin = new System.Windows.Forms.Padding(5);
             this.SelectorOfMonth.Name = "SelectorOfMonth";
-            this.SelectorOfMonth.Size = new System.Drawing.Size(121, 23);
+            this.SelectorOfMonth.Size = new System.Drawing.Size(188, 31);
             this.SelectorOfMonth.TabIndex = 4;
             // 
             // SubmitButton
             // 
-            this.SubmitButton.Location = new System.Drawing.Point(351, 22);
+            this.SubmitButton.Location = new System.Drawing.Point(552, 34);
+            this.SubmitButton.Margin = new System.Windows.Forms.Padding(5);
             this.SubmitButton.Name = "SubmitButton";
-            this.SubmitButton.Size = new System.Drawing.Size(75, 23);
+            this.SubmitButton.Size = new System.Drawing.Size(118, 35);
             this.SubmitButton.TabIndex = 5;
             this.SubmitButton.Text = "button1";
             this.SubmitButton.UseVisualStyleBackColor = true;
@@ -96,10 +98,9 @@ namespace SpendTracker
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(351, 139);
-            this.SaveButton.Margin = new System.Windows.Forms.Padding(2);
+            this.SaveButton.Location = new System.Drawing.Point(552, 213);
             this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(71, 22);
+            this.SaveButton.Size = new System.Drawing.Size(112, 34);
             this.SaveButton.TabIndex = 6;
             this.SaveButton.Text = "button1";
             this.SaveButton.UseVisualStyleBackColor = true;
@@ -107,9 +108,9 @@ namespace SpendTracker
             // 
             // MainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(509, 293);
+            this.ClientSize = new System.Drawing.Size(800, 449);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.SubmitButton);
             this.Controls.Add(this.SelectorOfMonth);
@@ -118,7 +119,6 @@ namespace SpendTracker
             this.Controls.Add(this.ContainerOfTable);
             this.Controls.Add(this.SelectorOfYear);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainWindow";
             this.Text = "SpendTracker";
             this.ResumeLayout(false);
