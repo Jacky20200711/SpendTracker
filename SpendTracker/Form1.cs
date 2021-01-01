@@ -97,7 +97,7 @@ namespace SpendTracker
             SelectorOfMonth.Location = (Point)new Size(x, y);
 
             // 預設內容為現在的月份
-            SelectorOfMonth.Text = DateTime.Now.ToString("MM");
+            SelectorOfMonth.Text = DateTime.Now.Month.ToString();
 
             // 可以選擇1~12月
             for(int i = 12; i > 0; i--)
@@ -598,19 +598,23 @@ namespace SpendTracker
             string yearStr = SelectorOfYear.Text;
             string monthStr = SelectorOfMonth.Text;
 
+            // 設置年份範圍
+            int minYear = 2000;
+            int maxYear = 9999;
+
             // 檢查輸入的年份
             if (int.TryParse(yearStr, out _))
             {
                 int year = int.Parse(yearStr);
-                if(year < 2015 || year > 9999)
+                if(year < minYear || year > maxYear)
                 {
-                    MessageBox.Show($"查詢失敗，輸入的年份必須是2015~9999");
+                    MessageBox.Show($"查詢失敗，輸入的年份必須是{minYear}~{maxYear}");
                     return false;
                 }
             }
             else
             {
-                MessageBox.Show($"查詢失敗，輸入的年份必須是2015~9999");
+                MessageBox.Show($"查詢失敗，輸入的年份必須是{minYear}~{maxYear}");
                 return false;
             }
 
