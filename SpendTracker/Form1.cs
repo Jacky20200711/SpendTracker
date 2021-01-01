@@ -582,7 +582,12 @@ namespace SpendTracker
             // 檢查備註長度
             for (int i = 0; i < numOfData; i++)
             {
-                if (rowList[i][^1].Text.Length > 30)
+                // 若為空則補"無"
+                if(rowList[i][^1].Text.Length < 1)
+                {
+                    rowList[i][^1].Text = "無";
+                }
+                else if (rowList[i][^1].Text.Length > 30)
                 {
                     MessageBox.Show($"儲存失敗，請檢查 {rowList[i][0].Text} 的備註長度(限30字)");
                     return false;
