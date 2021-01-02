@@ -19,4 +19,3 @@ Win10(64bit) + Visual Studio 2019 + .NET Core 3.1 + WinForm
 # 以總花費做排序  
 ![image](https://github.com/Jacky20200711/SpendTracker/blob/master/DEMO_02.PNG?raw=true)  
 &emsp;  
-  
