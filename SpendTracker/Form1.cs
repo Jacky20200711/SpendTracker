@@ -536,23 +536,38 @@ namespace SpendTracker
                     index++;
                 }
 
-                // 標記多餘的日期資料
-                for (int i = end; i < rowList.Count - 1; i++)
+                // 根據頁數調整UI顯示
+                if(currentPage == 2)
                 {
-                    rowList[i][0].Text = "--------------------";
-                    rowList[i][1].Text = "--------------------";
-                    rowList[i][2].Text = "--------------------";
-                    rowList[i][3].Text = "--------------------";
-                    rowList[i][4].Text = "--------------------";
-                    rowList[i][5].Text = "--------------------------------------------------------------------------";
+                    for (int i = end; i < rowList.Count - 1; i++)
+                    {
+                        // 標記多餘的日期資料
+                        rowList[i][0].Text = "--------------------";
+                        rowList[i][1].Text = "--------------------";
+                        rowList[i][2].Text = "--------------------";
+                        rowList[i][3].Text = "--------------------";
+                        rowList[i][4].Text = "--------------------";
+                        rowList[i][5].Text = "--------------------------------------------------------------------------";
 
-                    // 禁止編輯多餘的欄位
-                    rowList[i][0].ReadOnly = true;
-                    rowList[i][1].ReadOnly = true;
-                    rowList[i][2].ReadOnly = true;
-                    rowList[i][3].ReadOnly = true;
-                    rowList[i][4].ReadOnly = true;
-                    rowList[i][5].ReadOnly = true;
+                        // 禁止編輯多餘的欄位
+                        rowList[i][1].ReadOnly = true;
+                        rowList[i][2].ReadOnly = true;
+                        rowList[i][3].ReadOnly = true;
+                        rowList[i][4].ReadOnly = true;
+                        rowList[i][5].ReadOnly = true;
+                    }
+                }
+                else
+                {
+                    // 解禁編輯，讓回到第一頁的使用者可以編輯這些欄位
+                    for (int i = 0; i < end; i++)
+                    {
+                        rowList[i][1].ReadOnly = false;
+                        rowList[i][2].ReadOnly = false;
+                        rowList[i][3].ReadOnly = false;
+                        rowList[i][4].ReadOnly = false;
+                        rowList[i][5].ReadOnly = false;
+                    }
                 }
 
                 // 將花費加總寫入該頁的最後一列
