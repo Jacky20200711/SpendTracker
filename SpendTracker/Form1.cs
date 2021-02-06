@@ -560,12 +560,12 @@ namespace SpendTracker
                 else
                 {
                     // 解禁編輯，讓回到第一頁的使用者可以編輯這些欄位
+                    // rowList[i][4]為總花費，保持禁止編輯
                     for (int i = 0; i < end; i++)
                     {
                         rowList[i][1].ReadOnly = false;
                         rowList[i][2].ReadOnly = false;
                         rowList[i][3].ReadOnly = false;
-                        rowList[i][4].ReadOnly = false;
                         rowList[i][5].ReadOnly = false;
                     }
                 }
