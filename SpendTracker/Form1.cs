@@ -481,7 +481,7 @@ namespace SpendTracker
 
                     dailySpends.Add(new DailySpend
                     {
-                        Date = dataOfDay[0],
+                        Date = $"{dataOfDay[0]}({GetWeek(dataOfDay[0])})",
                         Food = Convert.ToInt32(dataOfDay[1]),
                         Transportation = Convert.ToInt32(dataOfDay[2]),
                         Other = Convert.ToInt32(dataOfDay[3]),
@@ -507,6 +507,32 @@ namespace SpendTracker
                 string ErrorMessage = $"讀取失敗，請到資料夾{currentYear}下查看{targetFile}的資料是否異常!";
                 MessageBox.Show(ErrorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(0);
+            }
+        }
+
+        private static string GetWeek(string dateStr)
+        {
+            try
+            {
+                int year = int.Parse(dateStr.Split('-')[0]);
+                int month = int.Parse(dateStr.Split('-')[1]);
+                int day = int.Parse(dateStr.Split('-')[2]);
+                DateTime date = new DateTime(year, month, day);
+                int week = (int)date.DayOfWeek;
+                return week switch
+                {
+                    1 => "一",
+                    2 => "二",
+                    3 => "三",
+                    4 => "四",
+                    5 => "五",
+                    6 => "六",
+                    _ => "日",
+                };
+            }
+            catch
+            {
+                return "";
             }
         }
 
