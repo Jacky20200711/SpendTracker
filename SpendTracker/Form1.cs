@@ -767,7 +767,8 @@ namespace SpendTracker
                 // 將更新過並依照日期排序的月份資料，寫入到對應的檔案
                 for (int i = 0; i < NewData.Count; i++)
                 {
-                    file.WriteLine($"{NewData[i].Date},{NewData[i].Food},{NewData[i].Transportation},{NewData[i].Other},{NewData[i].TotalAmount},{NewData[i].Remarks}");
+                    string dateStr = NewData[i].Date.Split('(')[0];
+                    file.WriteLine($"{dateStr},{NewData[i].Food},{NewData[i].Transportation},{NewData[i].Other},{NewData[i].TotalAmount},{NewData[i].Remarks}");
                 }
 
                 // 關閉檔案
